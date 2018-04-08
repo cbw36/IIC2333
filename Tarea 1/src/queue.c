@@ -9,7 +9,7 @@ Queue* initQueue(int priority, int q, int size, int num_processes)
     queue->q = q;
     queue->priority = priority  ;
     queue->size = size;
-    queue->num_procceses = num_processes;
+    queue->num_processes = num_processes;
 //    queue->has_ready = has_ready;
 
 }
@@ -22,9 +22,9 @@ void appendProcess(Queue* queue, Process* process)
         queue->processes = realloc(queue->processes, queue->size*2* sizeof(Process));
         queue->size *= 2;
     }
-    queue->processes[queue->num_processes] = process;
+    queue->processes[queue->num_processes] = *process;
     queue->num_processes += 1;
-    process->queue_pos = num_processes;
+    process->queue_pos = queue->num_processes;
 
 }
 
@@ -42,8 +42,8 @@ Process* removeProcess(Queue* queue,Process* process)
 
 void changeQueue(Queue* cur_queue, Queue* new_queue, Process* process)
 {
-    removeProcess(queue = cur_queue, process = process);
-    appendProcess(queue = new_queue, process = process);
+    removeProcess(cur_queue, process);
+    appendProcess(new_queue, process);
 
 }
 

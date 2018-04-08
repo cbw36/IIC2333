@@ -8,7 +8,7 @@
      int q;
      int priority;
      int size;
-     int num_procceses;
+     int num_processes;
 //     bool has_ready;
 
  };
