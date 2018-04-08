@@ -1,5 +1,5 @@
-#include <stdlib.h>
-#include "queue.h"
+#include <stdio.h>
+#include <stdlib.h>#include "queue.h"
 
 
 Queue* initQueue(int priority, int q, int size, int num_processes)
@@ -11,12 +11,14 @@ Queue* initQueue(int priority, int q, int size, int num_processes)
     queue->size = size;
     queue->num_processes = num_processes;
 //    queue->has_ready = has_ready;
+    return queue;
 
 }
 
 
 void appendProcess(Queue* queue, Process* process)
 {
+    printf("Process size = %i \n", process->size);
     if (queue->num_processes == queue->size)
     {
         queue->processes = realloc(queue->processes, queue->size*2* sizeof(Process));
@@ -25,7 +27,7 @@ void appendProcess(Queue* queue, Process* process)
     queue->processes[queue->num_processes] = *process;
     queue->num_processes += 1;
     process->queue_pos = queue->num_processes;
-
+    printf("Process size = %i \n", process->size);
 }
 
 Process* removeProcess(Queue* queue,Process* process)
@@ -46,4 +48,8 @@ void changeQueue(Queue* cur_queue, Queue* new_queue, Process* process)
     appendProcess(new_queue, process);
 
 }
+
+
+
+
 
