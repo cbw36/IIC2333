@@ -11,6 +11,7 @@ struct process{
     int pid;
 //    char* name[256];
     int state;
+    int priority;
     int* subprocess;
     int size;
     int pos; //
@@ -23,8 +24,7 @@ typedef struct process Process;
 
 //Process* initProcess(int pid, char name[256], int state, int completed,
 //                     int size, int pos, int queue_pos);
-Process* initProcess(int pid, int state, int completed,
-                     int size, int pos, int queue_pos);
+Process* initProcess(int pid, int size);
 void changeState(Process* process, int new_state);
 int getState(Process* process);
 void subprocessAppend(Process* process, int val);

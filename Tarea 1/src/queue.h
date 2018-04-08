@@ -16,7 +16,7 @@
 
 typedef struct queue Queue;
 
-Queue* initQueue(int priority, int q, int size, int num_processes);
+Queue* initQueue(int priority, int q);
 void appendProcess(Queue* queue, Process* process);
 Process* removeProcess(Queue* queue,Process* process);
 void changeQueue(Queue* cur_queue, Queue* new_queue, Process* process);

@@ -3,14 +3,14 @@
 #include "queue.h"
 
 
-Queue* initQueue(int priority, int q, int size, int num_processes)
+Queue* initQueue(int priority, int q)
 {
     Queue * queue = malloc(sizeof(Queue));
     queue-> processes = malloc(size * sizeof(Process));
     queue->q = q;
     queue->priority = priority  ;
-    queue->size = size;
-    queue->num_processes = num_processes;
+    queue->size = 10;
+    queue->num_processes = 0;
 //    queue->has_ready = has_ready;
     return queue;
 
@@ -25,6 +25,7 @@ void appendProcess(Queue* queue, Process* process)
     }
     queue->processes[queue->num_processes] = *process;
     queue->processes[queue->num_processes].queue_pos = queue->num_processes;
+    queue->processes[queue->num_processes].priority = queue->priority;
     queue->num_processes += 1;
 }
 
