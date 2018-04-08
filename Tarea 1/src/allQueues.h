@@ -4,7 +4,7 @@
 #define TAREA_1_ALLQUEUES_H
 
 struct allQueues{
-    struct Queue* queues;
+    struct queue* queues;
     int size;
     int pos;
 
