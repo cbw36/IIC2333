@@ -16,7 +16,6 @@ Queue* initQueue(int priority, int q, int size, int num_processes)
 
 }
 
-
 void appendProcess(Queue* queue, Process* process)
 {
     if (queue->num_processes == queue->size)
@@ -25,8 +24,8 @@ void appendProcess(Queue* queue, Process* process)
         queue->size *= 2;
     }
     queue->processes[queue->num_processes] = *process;
+    queue->processes[queue->num_processes].queue_pos = queue->num_processes;
     queue->num_processes += 1;
-    process->queue_pos = queue->num_processes;
 }
 
 Process* removeProcess(Queue* queue,Process* process)
@@ -42,13 +41,10 @@ Process* removeProcess(Queue* queue,Process* process)
 
 
 void changeQueue(Queue* cur_queue, Queue* new_queue, Process* process)
-{
+{   printf("inicio \n" );
     removeProcess(cur_queue, process);
+    printf("Cantidad de proceso en cola 1 = %i \n ", cur_queue->num_processes);
     appendProcess(new_queue, process);
+    printf("fin \n");
 
 }
-
-
-
-
-
