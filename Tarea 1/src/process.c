@@ -32,5 +32,4 @@ void subprocessAppend(Process* process, int val)
 {
     process->subprocess[process->pos] = val;
     process->pos ++;
-
 }
