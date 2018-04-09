@@ -15,6 +15,7 @@ Process* initProcess(int pid, int size)
     process-> pos = 0;
     process->queue_pos = 0;
     process->completed = 0;
+    process->quantum_remaining = 0;
     return process;
 }
 

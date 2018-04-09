@@ -17,5 +17,7 @@ typedef struct allQueues AllQueues;
 AllQueues* initAllQueues(int size);
 
 void appendQueue(AllQueues* all_queues,Queue* new_queue);
+AllQueues* initializeScheduler();
+
 
 #endif //TAREA_1_ALLQUEUE_H

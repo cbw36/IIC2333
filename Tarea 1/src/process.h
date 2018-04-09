@@ -17,6 +17,7 @@ struct process{
     int pos; //
     int queue_pos;  //location in queue its stored in
     int completed;  //number of subprocesses completed (also the index of current subprocess)
+    int quantum_remaining;
 };
 
 typedef struct process Process;
