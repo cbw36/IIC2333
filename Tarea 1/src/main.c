@@ -117,6 +117,14 @@ int main(int argc, char * argv[])
 AllQueues* initializeScheduler()
 {
     AllQueues* all_queues = initAllQueues(Q);
+    printf("start \n");
+    int c;
+    FILE *file;
+    file = fopen("processes.txt", "r");
+    if (file) {
+    while ((c = getc(file)) != EOF)
+        putchar(c);
+    fclose(file);}
 
     for (int i = 0; i<Q; i++)
     {
