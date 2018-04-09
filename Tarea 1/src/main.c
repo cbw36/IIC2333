@@ -3,6 +3,7 @@
 #include "allQueues.h"
 #include "queue.h"
 #include "process.h"
+#include <unistd.h>
 
 /**
  * Rule 1: If priority of process A>B, execute A
@@ -37,45 +38,65 @@ int main(int argc, char * argv[])
     printf("Enter simulation.  Clock = %i \n", clock);
     while (simulate == 1)
     {
-        printf("Time step: Clock = %i \n", clock);
+
         for (int i =0; i<Q; i++)
-        {
+
+        {executed = 0;
+
             int num_proc = all_queues->queues[i].num_processes;
             for (int j = 0; j<all_queues->queues[i].num_processes; j++)
-            {
-                executed = 0;
+            {printf("Time step: Clock = %i \n", clock);
+
                 if (all_queues->queues[i].processes[j].state == 0)
                 {
                     executed = 1;
                     if (all_queues->queues[i].processes[j].quantum_remaining == all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed])
                     {
-                        printf(" Case 1: Execute process and stay in queue \n");
+                        printf(" Case 1: Execute process and stay in queue %i %i %i\n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],i );
                         clock = clock + all_queues->queues[i].processes[j].quantum_remaining;
                         all_queues->queues[i].processes[j].quantum_remaining = 0;
                         all_queues->queues[i].processes[j].completed++;
+
                         if (all_queues->queues[i].processes[j].completed == all_queues->queues[i].processes[j].pos)
                         {
                             printf(" Change state to finished \n");
                             changeState(&all_queues->queues[i].processes[j], 2);
                         }
+                        if (i+1 != Q)
+                        {
+                        changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
+                        }
+                        else
+                        {
+                          all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
+                        }
                     }
                     else if (all_queues->queues[i].processes[j].quantum_remaining < all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed])
                     {
-                        printf(" Case 2: Execute quantum time and reduce queue \n");
+                        printf(" Case 2: Execute quantum time and reduce queue %i %i, %i\n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],i);
                         clock = clock + all_queues->queues[i].processes[j].quantum_remaining;
                         all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed] = all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]-all_queues->queues[i].processes[j].quantum_remaining;
+                        if (i+1 != Q)
+                        {
                         changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
+                        }
+                        else
+                        {
+                          all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
+                        }
                     }
                     else
                     {
-                        printf(" Case 3: Execute process and stay in queue \n");
+                        printf(" Case 3: Execute process and stay in queue %i %i %i\n", all_queues->queues[i].processes[j].pid,  all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],all_queues->queues[i].processes[j].completed);
                         clock = clock + all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed];
                         all_queues->queues[i].processes[j].quantum_remaining = all_queues->queues[i].processes[j].quantum_remaining - all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed];
-                        all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed] ++;
+                        all_queues->queues[i].processes[j].completed ++;
                         if (all_queues->queues[i].processes[j].completed == all_queues->queues[i].processes[j].pos)
                         {
                             printf(" Change state to finished \n");
                             changeState(&all_queues->queues[i].processes[j], 2);
+
+
                         }
                     }
                 }
@@ -83,9 +104,11 @@ int main(int argc, char * argv[])
             }
             if (executed==1)
                 break;
-            else if ( (executed == 0) && (i == Q ))
+
+            else if ( (executed == 0) && (i == Q-1 ))
             { simulate = 0; }
         }
+        usleep(100000);
     }
     printf("exit simulation!");
 }
@@ -107,7 +130,7 @@ AllQueues* initializeScheduler()
         Process* new_process = initProcess(i, 3);
         for (int j=0; j<3; j++)
         {
-            subprocessAppend(new_process, j*5);
+            subprocessAppend(new_process, 1 + j*5);
         }
         appendProcess(&all_queues->queues[0], new_process);
     }

@@ -45,6 +45,6 @@ Process* removeProcess(Queue* queue,Process* process)
 
 void changeQueue(Queue* cur_queue, Queue* new_queue, Process* process)
 {
-    removeProcess(cur_queue, process);
     appendProcess(new_queue, process);
+    removeProcess(cur_queue, process);
 }
