@@ -23,11 +23,32 @@
       <file leaf-file-name="main.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2038">
-              <caret line="237" column="13" lean-forward="true" selection-start-line="237" selection-start-column="13" selection-end-line="237" selection-end-column="13" />
+            <state relative-caret-position="2316">
+              <caret line="211" column="25" lean-forward="true" selection-start-line="211" selection-start-column="25" selection-end-line="211" selection-end-column="25" />
               <folding>
-                <element signature="e#23034#33184#0" expanded="false" />
+                <element signature="e#3690#4061#0" expanded="false" />
+                <marker date="1523325756000" expanded="false" signature="546:830" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list.c" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/list.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="list.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/list.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -35,11 +56,21 @@
       <file leaf-file-name="allQueues.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/allQueues.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <state relative-caret-position="360">
+              <caret line="24" column="47" lean-forward="false" selection-start-line="24" selection-start-column="47" selection-end-line="24" selection-end-column="47" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="process.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/process.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="266">
+              <caret line="19" column="26" lean-forward="false" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -86,6 +117,7 @@
       <find>num_proc</find>
       <find>changeQ</find>
       <find>Time step</find>
+      <find>appendProcess</find>
     </findStrings>
     <replaceStrings>
       <replace>allQueues</replace>
@@ -197,7 +229,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="42355000" />
+    <option name="totallyTimeSpent" value="46231000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="648" y="23" width="1032" height="1023" extended-state="0" />
@@ -262,29 +294,11 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="9" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/main.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#23034#33184#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/queue.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="615">
-          <caret line="41" column="28" lean-forward="true" selection-start-line="41" selection-start-column="4" selection-end-line="41" selection-end-column="28" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/process.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="285">
@@ -306,7 +320,8 @@
         <state relative-caret-position="150">
           <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
           <folding>
-            <element signature="e#23034#33184#0" expanded="false" />
+            <element signature="e#3690#4061#0" expanded="false" />
+            <marker date="1523325756000" expanded="false" signature="546:830" ph="..." />
           </folding>
         </state>
       </provider>
@@ -366,7 +381,8 @@
         <state relative-caret-position="210">
           <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
           <folding>
-            <element signature="e#23034#33184#0" expanded="false" />
+            <element signature="e#3690#4061#0" expanded="false" />
+            <marker date="1523325756000" expanded="false" signature="546:830" ph="..." />
           </folding>
         </state>
       </provider>
@@ -477,7 +493,8 @@
         <state relative-caret-position="163">
           <caret line="53" column="31" lean-forward="false" selection-start-line="53" selection-start-column="31" selection-end-line="53" selection-end-column="31" />
           <folding>
-            <element signature="e#23034#33184#0" expanded="false" />
+            <element signature="e#3690#4061#0" expanded="false" />
+            <marker date="1523325756000" expanded="false" signature="546:830" ph="..." />
           </folding>
         </state>
       </provider>
@@ -487,7 +504,8 @@
         <state relative-caret-position="150">
           <caret line="10" column="45" lean-forward="true" selection-start-line="10" selection-start-column="45" selection-end-line="10" selection-end-column="45" />
           <folding>
-            <element signature="e#23034#33184#0" expanded="false" />
+            <element signature="e#3690#4061#0" expanded="false" />
+            <marker date="1523325756000" expanded="false" signature="546:830" ph="..." />
           </folding>
         </state>
       </provider>
@@ -546,7 +564,8 @@
         <state relative-caret-position="210">
           <caret line="14" column="1" lean-forward="true" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
           <folding>
-            <element signature="e#23034#33184#0" expanded="false" />
+            <element signature="e#3690#4061#0" expanded="false" />
+            <marker date="1523325756000" expanded="false" signature="546:830" ph="..." />
           </folding>
         </state>
       </provider>
@@ -611,14 +630,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/process.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="26" lean-forward="false" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/queue.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="315">
@@ -651,10 +662,34 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/list.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/process.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="19" column="26" lean-forward="false" selection-start-line="19" selection-start-column="26" selection-end-line="19" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/list.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/allQueues.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="0" lean-forward="true" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        <state relative-caret-position="360">
+          <caret line="24" column="47" lean-forward="false" selection-start-line="24" selection-start-column="47" selection-end-line="24" selection-end-column="47" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -663,10 +698,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2038">
-          <caret line="237" column="13" lean-forward="true" selection-start-line="237" selection-start-column="13" selection-end-line="237" selection-end-column="13" />
+        <state relative-caret-position="2316">
+          <caret line="211" column="25" lean-forward="true" selection-start-line="211" selection-start-column="25" selection-end-line="211" selection-end-column="25" />
           <folding>
-            <element signature="e#23034#33184#0" expanded="false" />
+            <element signature="e#3690#4061#0" expanded="false" />
+            <marker date="1523325756000" expanded="false" signature="546:830" ph="..." />
           </folding>
         </state>
       </provider>

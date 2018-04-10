@@ -34,63 +34,69 @@ int main(int argc, char * argv[])
 //    }
 
     List* list = initList();
-    Process* new_process = initProcess(1, 3, 5);
-    Process* new_process1 = initProcess(2, 3, 3);
-    Process* new_process2 = initProcess(3, 3, 4);
-    Process* new_process3 = initProcess(4, 3, 2);
+    Process* new_process = initProcess(1, 3, 0);
+    Process* new_process1 = initProcess(2, 3, 10);
+    Process* new_process2 = initProcess(3, 3, 70);
+    Process* new_process3 = initProcess(4, 3, 50);
     list_appendProcess(list, new_process);
-    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
     list_appendProcess(list, new_process1);
-    printf("append2\n" );
-    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
-    printf("%i %i\n",list->processes[1].pid, list->processes[1].queue_pos );
     list_appendProcess(list, new_process2);
-    printf("append3\n" );
-    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
-    printf("%i %i\n",list->processes[1].pid, list->processes[1].queue_pos );
-    printf("%i %i\n",list->processes[2].pid, list->processes[2].queue_pos );
     list_appendProcess(list, new_process3);
-    printf("append4\n" );
-    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
-    printf("%i %i\n",list->processes[1].pid, list->processes[1].queue_pos );
-    printf("%i %i\n",list->processes[2].pid, list->processes[2].queue_pos );
-    printf("%i %i\n",list->processes[3].pid, list->processes[3].queue_pos );
-    listremoveProces(list, &list->processes[3]);
-    printf("remove\n" );
-    printf("%i\n",list->processes[0].pid );
-    printf("%i\n",list->processes[1].pid );
-    printf("%i\n",list->processes[2].pid );
-    printf("%i\n",list->processes[3].pid );
 
-    AllQueues* all_queues = initializeScheduler();
-    printState(all_queues);
+    AllQueues* all_queues = initializeScheduler(list);
+//    printState(all_queues);
+    printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
+    printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
+    printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
+    for (int i = 0; i<list->num_processes; i++)
+    {
+        printf("List index %i process % i = %i %i %i \n",i, list->processes[i].pid, list->processes[i].subprocess[0],  list->processes[i].subprocess[1],  list->processes[i].subprocess[2]);
+    }
 
 
     printf("Enter simulation");
-    MLFQV1(all_queues, list);
-    printf("exit simulation!");
+//    MLFQV1(all_queues, list);
+//    MLFQV2(all_queues, list);
+    MLFQV3(all_queues, list);
+//    printf("exit simulation!");
 }
 
-AllQueues* initializeScheduler()
+AllQueues* initializeScheduler(List * list)
 {
     AllQueues* all_queues = initAllQueues(Q);
 
+    //Initialize Queues
     for (int i = 0; i<Q; i++)
     {
         Queue* new_queue = initQueue(i+1,q);
         appendQueue(all_queues, new_queue);
     }
 
+    //Generate processes with all start times = 0
+//    for (int i = 0; i<NUM_PROCESSES; i++ )
+//    {
+//        Process* new_process = initProcess(i, 3, 0);
+//        for (int j=0; j<3; j++)
+//        {
+//            subprocessAppend(new_process, 1 + i + j*3);
+//        }
+//        appendProcess(&all_queues->queues[0], new_process);
+//    }
 
-    for (int i = 0; i<NUM_PROCESSES; i++ )
+    //Read processes from list with variable start times
+    for (int i = 0; i<list->num_processes; i++ )
     {
-        Process* new_process = initProcess(i, 3, i);
         for (int j=0; j<3; j++)
         {
-            subprocessAppend(new_process, 1 + i + j*3);
+            subprocessAppend(&list->processes[i], 1 + i + j*3);
         }
-        appendProcess(&all_queues->queues[0], new_process);
+        if (list->processes[i].arrival_time == 0) {
+            appendProcess(&all_queues->queues[0], &list->processes[i]);
+            listremoveProces(list, &list->processes[i]);
+            i--;
+        }
     }
+
     return all_queues;
 
 }
@@ -115,14 +121,19 @@ void MLFQV1(AllQueues* all_queues, List* list)
 
 
     while (simulate == 1)
-    {int g = 0;
-      for (g = 0; g < list-> num_processes; g++) {
-      if (clock> list->processes[g].arrival_time) {
-        appendProcess(&all_queues->queues[0], list->processes[g]);
-        listremoveProces(list, &list->processes[g])
-        g--;
-      };
-      }
+    {
+        //First see if we need to add any processes
+        int g;
+        for (g = 0; g < list-> num_processes; g++)
+        {
+            if (clock >= list->processes[g].arrival_time)
+            {
+                appendProcess(&all_queues->queues[0], &list->processes[g]);
+                listremoveProces(list, &list->processes[g]);
+                g--;
+            }
+        }
+
         for (int i =0; i<Q; i++)
         {
             executed = 0;
@@ -215,14 +226,19 @@ void MLFQV1(AllQueues* all_queues, List* list)
             if (executed==1)
                 break;
 
-            else if ( (executed == 0) && (i == Q-1 ))
-            { simulate = 0; }
+            else if ( (executed == 0) && (i == Q-1) && (list->num_processes == 0))
+            {
+                simulate = 0;
+            }
+            if((executed == 0) && (i == Q-1 ) && (list->num_processes > 0)){
+                clock = list->processes[0].arrival_time;
+            }
         }
         usleep(100000);
     }
 }
 
-void MLFQV2(AllQueues* all_queues)
+void MLFQV2(AllQueues* all_queues, List* list)
 {
     int S = PERIOD;
     int simulate = 1;
@@ -231,7 +247,7 @@ void MLFQV2(AllQueues* all_queues)
 
     while (simulate == 1)
     {
-        //Before Check for next process check if period S has elapsed
+        //First Check for next process check if period S has elapsed
         if (clock> S)  // Move all processes up a queue (unless at queue 0 already
         {
             while (clock >S)
@@ -252,6 +268,19 @@ void MLFQV2(AllQueues* all_queues)
                 }
             }
         }
+
+        //Second see if we need to add any processes
+        int g;
+        for (g = 0; g < list-> num_processes; g++)
+        {
+            if (clock >= list->processes[g].arrival_time)
+            {
+                appendProcess(&all_queues->queues[0], &list->processes[g]);
+                listremoveProces(list, &list->processes[g]);
+                g--;
+            }
+        }
+
 
         //Find next process to execute
         for (int i =0; i<Q; i++)
@@ -346,15 +375,31 @@ void MLFQV2(AllQueues* all_queues)
             if (executed==1)
                 break;
 
-            else if ( (executed == 0) && (i == Q-1 ))
-            { simulate = 0; }
+            else if ( (executed == 0) && (i == Q-1) && (list->num_processes == 0))
+            {
+                simulate = 0;
+            }
+            if((executed == 0) && (i == Q-1 ) && (list->num_processes > 0)){
+                clock = list->processes[0].arrival_time;
+            }
         }
         usleep(100000);
     }
 }
 
-void MLFQV3(AllQueues* all_queues)
+void MLFQV3(AllQueues* all_queues, List* list)
 {
+    //Change quantum values
+    int p = 0;
+    for ( p = 0; p < all_queues->pos; p++)
+    {
+        all_queues->queues[p].q = (all_queues->pos-p)*all_queues->queues[p].q;
+    }
+    for(int i = 0; i< Q; i++)
+    {
+        printf("QUEUE %i = %i \n", i, all_queues->queues[i].q);
+    }
+
     int S = PERIOD;
     int simulate = 1;
     int clock = 0;
@@ -362,7 +407,7 @@ void MLFQV3(AllQueues* all_queues)
 
     while (simulate == 1)
     {
-        //Before Check for next process check if period S has elapsed
+        //First Check for next process check if period S has elapsed
         if (clock> S)  // Move all processes up a queue (unless at queue 0 already
         {
             while (clock >S)
@@ -383,6 +428,20 @@ void MLFQV3(AllQueues* all_queues)
                 }
             }
         }
+
+        //Second see if we need to add any processes
+        int g;
+        for (g = 0; g < list-> num_processes; g++)
+        {
+            if (clock >= list->processes[g].arrival_time)
+            {
+                printf("ADDING PROCESS FROM LIST!!! \n");
+                appendProcess(&all_queues->queues[0], &list->processes[g]);
+                listremoveProces(list, &list->processes[g]);
+                g--;
+            }
+        }
+
 
         //Find next process to execute
         for (int i =0; i<Q; i++)
@@ -477,9 +536,16 @@ void MLFQV3(AllQueues* all_queues)
             if (executed==1)
                 break;
 
-            else if ( (executed == 0) && (i == Q-1 ) && (list->num_processes == 0)
-            { simulate = 0; }
+            else if ( (executed == 0) && (i == Q-1) && (list->num_processes == 0))
+            {
+                simulate = 0;
+            }
+            if((executed == 0) && (i == Q-1 ) && (list->num_processes > 0)){
+                printf("NO process executed, change clock! \n");
+                clock = list->processes[0].arrival_time;
+            }
         }
         usleep(100000);
     }
 }
+
