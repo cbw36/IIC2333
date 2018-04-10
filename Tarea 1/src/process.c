@@ -18,7 +18,12 @@ Process* initProcess(int pid, int size, int arrival_time)
     process->quantum_remaining = 0;
     process->arrival_time = arrival_time;
     process -> cpu_turns = 0;
-    
+    process -> blocked = 0;
+    process -> turnaround_time = 0;
+    process -> response_time = 0;
+    process -> waiting_time = 0;
+
+
     return process;
 }
 
