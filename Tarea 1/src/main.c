@@ -3,6 +3,7 @@
 #include "allQueues.h"
 #include "queue.h"
 #include "process.h"
+#include "list.h"
 #include <unistd.h>
 
 /**
@@ -32,14 +33,42 @@ int main(int argc, char * argv[])
 //        printf(" name %s arrival %d processes %d \n", name, arrival, num_p);
 //    }
 
+    List* list = initList();
+    Process* new_process = initProcess(1, 3, 5);
+    Process* new_process1 = initProcess(2, 3, 3);
+    Process* new_process2 = initProcess(3, 3, 4);
+    Process* new_process3 = initProcess(4, 3, 2);
+    list_appendProcess(list, new_process);
+    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
+    list_appendProcess(list, new_process1);
+    printf("append2\n" );
+    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
+    printf("%i %i\n",list->processes[1].pid, list->processes[1].queue_pos );
+    list_appendProcess(list, new_process2);
+    printf("append3\n" );
+    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
+    printf("%i %i\n",list->processes[1].pid, list->processes[1].queue_pos );
+    printf("%i %i\n",list->processes[2].pid, list->processes[2].queue_pos );
+    list_appendProcess(list, new_process3);
+    printf("append4\n" );
+    printf("%i %i\n",list->processes[0].pid, list->processes[0].queue_pos );
+    printf("%i %i\n",list->processes[1].pid, list->processes[1].queue_pos );
+    printf("%i %i\n",list->processes[2].pid, list->processes[2].queue_pos );
+    printf("%i %i\n",list->processes[3].pid, list->processes[3].queue_pos );
+    listremoveProces(list, &list->processes[3]);
+    printf("remove\n" );
+    printf("%i\n",list->processes[0].pid );
+    printf("%i\n",list->processes[1].pid );
+    printf("%i\n",list->processes[2].pid );
+    printf("%i\n",list->processes[3].pid );
+
     AllQueues* all_queues = initializeScheduler();
     printState(all_queues);
 
 
-
-    printf("Enter simulation \n");
-    MLFQV2(all_queues);
-    printf("exit simulation! \n");
+    printf("Enter simulation");
+    MLFQV1(all_queues, list);
+    printf("exit simulation!");
 }
 
 AllQueues* initializeScheduler()
@@ -55,7 +84,7 @@ AllQueues* initializeScheduler()
 
     for (int i = 0; i<NUM_PROCESSES; i++ )
     {
-        Process* new_process = initProcess(i, 3);
+        Process* new_process = initProcess(i, 3, i);
         for (int j=0; j<3; j++)
         {
             subprocessAppend(new_process, 1 + i + j*3);
@@ -78,11 +107,15 @@ void printState(AllQueues* all_queues)
     }
 }
 
-void MLFQV1(AllQueues* all_queues)
+void MLFQV1(AllQueues* all_queues, List* list)
 {
     int simulate = 1;
     int clock = 0;
     int executed;
+    int g = 0;
+    for (g = 0; g < list-> num_processes; g++) {
+      printf("hola\n");
+    }
 
     while (simulate == 1)
     {

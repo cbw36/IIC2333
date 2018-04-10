@@ -2,7 +2,7 @@
 #include <string.h>
 #include "process.h"
 
-Process* initProcess(int pid, int size)
+Process* initProcess(int pid, int size, int arrival_time)
 //Process* initProcess(int pid, char name[256], int state, int completed, int size, int pos, int queue_pos)
 {
     Process * process = malloc(sizeof(Process));
@@ -16,6 +16,7 @@ Process* initProcess(int pid, int size)
     process->queue_pos = 0;
     process->completed = 0;
     process->quantum_remaining = 0;
+    process->arrival_time = arrival_time;
     return process;
 }
 
@@ -34,4 +35,3 @@ void subprocessAppend(Process* process, int val)
     process->subprocess[process->pos] = val;
     process->pos ++;
 }
-

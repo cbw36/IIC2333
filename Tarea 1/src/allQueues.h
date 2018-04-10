@@ -1,4 +1,5 @@
 #include "queue.h"
+#include "list.h"
 
 #ifndef TAREA_1_ALLQUEUES_H
 #define TAREA_1_ALLQUEUES_H
@@ -19,9 +20,8 @@ AllQueues* initAllQueues(int size);
 void appendQueue(AllQueues* all_queues,Queue* new_queue);
 AllQueues* initializeScheduler();
 void printState(AllQueues* all_queues);
-void MLFQV1(AllQueues* all_queues);
+void MLFQV1(AllQueues* all_queues, List* list);
 void MLFQV2(AllQueues* all_queues);
-
 
 
 #endif //TAREA_1_ALLQUEUE_H
