@@ -15,8 +15,7 @@
  */
 const int q = 5;
 const int Q = 3;
-const int NUM_PROCESSES = 5;
-const int PERIOD = 4;
+const int NUM_PROCESSES = 2;
 
 
 int main(int argc, char * argv[])
@@ -66,10 +65,12 @@ int main(int argc, char * argv[])
     printState(all_queues);
 
 
+
     printf("Enter simulation");
     MLFQV1(all_queues, list);
     printf("exit simulation!");
 }
+
 
 AllQueues* initializeScheduler()
 {
@@ -87,7 +88,7 @@ AllQueues* initializeScheduler()
         Process* new_process = initProcess(i, 3, i);
         for (int j=0; j<3; j++)
         {
-            subprocessAppend(new_process, 1 + i + j*3);
+            subprocessAppend(new_process, 1 + j*5);
         }
         appendProcess(&all_queues->queues[0], new_process);
     }
@@ -117,19 +118,22 @@ void MLFQV1(AllQueues* all_queues, List* list)
     while (simulate == 1)
     {int g = 0;
       for (g = 0; g < list-> num_processes; g++) {
-      if (clock> list->processes[g].arrival_time) {
-        appendProcess(&all_queues->queues[0], list->processes[g]);
-        listremoveProces(list, &list->processes[g])
-        g--;
-      };
+      if (clock>= list->processes[g].arrival_time) {
+        appendProcess(&all_queues->queues[0], &list->processes[g]);
+        listremoveProces(list, &list->processes[g]);
+        g--;}
+      else{
+        break;
+      }
+      }
       }
         for (int i =0; i<Q; i++)
-        {
-            executed = 0;
-            printf("Time step: Clock = %i \n", clock);
+        {executed = 0;
+
             int num_proc = all_queues->queues[i].num_processes;
             for (int j = 0; j<all_queues->queues[i].num_processes; j++)
-            {
+            {printf("Time step: Clock = %i \n", clock);
+
                 if (all_queues->queues[i].processes[j].state == 0)
                 {
                     executed = 1;
@@ -154,40 +158,30 @@ void MLFQV1(AllQueues* all_queues, List* list)
                         if (i+1 != Q)
                         {
                             changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
-                            printf("Case 1 change queue \n");
-                            j--;
                         }
 
                         else
                         {
                             all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
                         }
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
                     }
                     else if (all_queues->queues[i].processes[j].quantum_remaining < all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed])
                     {
 //                        printf(" Case 2: Execute quantum time and reduce queue %i %i, %i\n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],i);
                         printf(" Case 2: Execute process %i subprocess %i from queue %i for %i seconds \n",all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].completed, i, all_queues->queues[i].processes[j].quantum_remaining );
+
                         clock = clock + all_queues->queues[i].processes[j].quantum_remaining;
                         all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed] = all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]-all_queues->queues[i].processes[j].quantum_remaining;
                         if (i+1 != Q)
                         {
                             changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
-                            j--;
-                            printf("Case 2 change queue \n"); //TODO ADDED
+                            printf("Change queue and %i seconds left: \n", all_queues->queues[i+1].processes[j].subprocess[all_queues->queues[i].processes[j].completed]); //TODO ADDED
                         }
 
                         else
                         {
                             all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
                         }
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
                     }
                     else
                     {
@@ -204,10 +198,6 @@ void MLFQV1(AllQueues* all_queues, List* list)
                         }
                         printf("Burst state for process %i: %i %i %i \n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[0],
                                all_queues->queues[i].processes[j].subprocess[1], all_queues->queues[i].processes[j].subprocess[2]); //TODO ADDED
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
                     }
                 }
             }
@@ -215,271 +205,12 @@ void MLFQV1(AllQueues* all_queues, List* list)
             if (executed==1)
                 break;
 
-            else if ( (executed == 0) && (i == Q-1 ))
-            { simulate = 0; }
+            else if ( (executed == 0) && (i == Q-1 ) && (list->num_processes == 0))
+                  { simulate = 0; }
+            if((executed == 0) && (i == Q-1 ) && (list->num_processes > 0)){
+              clock = list->processes[0].arrival_time;
+            }
+
         }
         usleep(100000);
     }
-}
-
-void MLFQV2(AllQueues* all_queues)
-{
-    int S = PERIOD;
-    int simulate = 1;
-    int clock = 0;
-    int executed;
-
-    while (simulate == 1)
-    {
-        //Before Check for next process check if period S has elapsed
-        if (clock> S)  // Move all processes up a queue (unless at queue 0 already
-        {
-            while (clock >S)
-            {
-                S += PERIOD;
-            }
-            printf("Change Period at clock = %i S = %i \n", clock, S);
-
-
-            for (int i = 1; i<Q; i++)
-            {
-                for (int j = 0; all_queues->queues[i].num_processes; j++) // each process in each queue
-                {
-                    printf("Rule 5: Move process %i from queue %i \n", all_queues->queues[i].processes[j].pid, i);
-                    changeQueue(&all_queues->queues[i], &all_queues->queues[i-1],
-                                &all_queues->queues[i].processes[j]);
-                    j--;
-                }
-            }
-        }
-
-        //Find next process to execute
-        for (int i =0; i<Q; i++)
-        {
-            executed = 0;
-            printf("Time step: Clock = %i \n", clock);
-            int num_proc = all_queues->queues[i].num_processes;
-            for (int j = 0; j<all_queues->queues[i].num_processes; j++)
-            {
-                if (all_queues->queues[i].processes[j].state == 0)
-                {
-                    executed = 1;
-                    if (all_queues->queues[i].processes[j].quantum_remaining == all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed])
-                    {
-//                        printf(" Case 1: Execute process and stay in queue %i %i %i\n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],i );
-                        printf(" Case 1: Execute process %i subprocess %i from queue %i for %i seconds \n",all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].completed,
-                               i, all_queues->queues[i].processes[j].quantum_remaining ); // TODO ADDED!
-                        clock = clock + all_queues->queues[i].processes[j].quantum_remaining;
-                        all_queues->queues[i].processes[j].quantum_remaining = 0;
-                        all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]=0;//TODO ADDED!
-                        all_queues->queues[i].processes[j].completed++;
-                        printf("Burst state for process %i: %i %i %i \n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[0],
-                               all_queues->queues[i].processes[j].subprocess[1], all_queues->queues[i].processes[j].subprocess[2]); //TODO ADDED!
-
-                        if (all_queues->queues[i].processes[j].completed == all_queues->queues[i].processes[j].pos)
-                        {
-                            printf(" Change state to finished \n");
-                            changeState(&all_queues->queues[i].processes[j], 2);
-                        }
-
-                        if (i+1 != Q)
-                        {
-                            changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
-                            printf("Case 1 change queue \n");
-                            j--;
-                        }
-
-                        else
-                        {
-                            all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
-                        }
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
-                    }
-                    else if (all_queues->queues[i].processes[j].quantum_remaining < all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed])
-                    {
-//                        printf(" Case 2: Execute quantum time and reduce queue %i %i, %i\n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],i);
-                        printf(" Case 2: Execute process %i subprocess %i from queue %i for %i seconds \n",all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].completed, i, all_queues->queues[i].processes[j].quantum_remaining );
-                        clock = clock + all_queues->queues[i].processes[j].quantum_remaining;
-                        all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed] = all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]-all_queues->queues[i].processes[j].quantum_remaining;
-                        if (i+1 != Q)
-                        {
-                            changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
-                            j--;
-                            printf("Case 2 change queue \n"); //TODO ADDED
-                        }
-
-                        else
-                        {
-                            all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
-                        }
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
-                    }
-                    else
-                    {
-//                        printf(" Case 3: Execute process and stay in queue %i %i %i\n", all_queues->queues[i].processes[j].pid,  all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],all_queues->queues[i].processes[j].completed);
-                        printf(" Case 3: Execute process %i subprocess %i from queue  %i for %i seconds \n",all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].completed, i, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]);
-                        clock = clock + all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed];
-                        all_queues->queues[i].processes[j].quantum_remaining = all_queues->queues[i].processes[j].quantum_remaining - all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed];
-                        all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]=0;//TODO ADDED!
-                        all_queues->queues[i].processes[j].completed ++;
-                        if (all_queues->queues[i].processes[j].completed == all_queues->queues[i].processes[j].pos)
-                        {
-                            printf(" Change state to finished \n");
-                            changeState(&all_queues->queues[i].processes[j], 2);
-                        }
-                        printf("Burst state for process %i: %i %i %i \n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[0],
-                               all_queues->queues[i].processes[j].subprocess[1], all_queues->queues[i].processes[j].subprocess[2]); //TODO ADDED
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
-                    }
-                }
-            }
-
-            if (executed==1)
-                break;
-
-            else if ( (executed == 0) && (i == Q-1 ))
-            { simulate = 0; }
-        }
-        usleep(100000);
-    }
-}
-
-void MLFQV3(AllQueues* all_queues)
-{
-    int S = PERIOD;
-    int simulate = 1;
-    int clock = 0;
-    int executed;
-
-    while (simulate == 1)
-    {
-        //Before Check for next process check if period S has elapsed
-        if (clock> S)  // Move all processes up a queue (unless at queue 0 already
-        {
-            while (clock >S)
-            {
-                S += PERIOD;
-            }
-            printf("Change Period at clock = %i S = %i \n", clock, S);
-
-
-            for (int i = 1; i<Q; i++)
-            {
-                for (int j = 0; all_queues->queues[i].num_processes; j++) // each process in each queue
-                {
-                    printf("Rule 5: Move process %i from queue %i \n", all_queues->queues[i].processes[j].pid, i);
-                    changeQueue(&all_queues->queues[i], &all_queues->queues[i-1],
-                                &all_queues->queues[i].processes[j]);
-                    j--;
-                }
-            }
-        }
-
-        //Find next process to execute
-        for (int i =0; i<Q; i++)
-        {
-            executed = 0;
-            printf("Time step: Clock = %i \n", clock);
-            int num_proc = all_queues->queues[i].num_processes;
-            for (int j = 0; j<all_queues->queues[i].num_processes; j++)
-            {
-                if (all_queues->queues[i].processes[j].state == 0)
-                {
-                    executed = 1;
-                    if (all_queues->queues[i].processes[j].quantum_remaining == all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed])
-                    {
-//                        printf(" Case 1: Execute process and stay in queue %i %i %i\n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],i );
-                        printf(" Case 1: Execute process %i subprocess %i from queue %i for %i seconds \n",all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].completed,
-                               i, all_queues->queues[i].processes[j].quantum_remaining ); // TODO ADDED!
-                        clock = clock + all_queues->queues[i].processes[j].quantum_remaining;
-                        all_queues->queues[i].processes[j].quantum_remaining = 0;
-                        all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]=0;//TODO ADDED!
-                        all_queues->queues[i].processes[j].completed++;
-                        printf("Burst state for process %i: %i %i %i \n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[0],
-                               all_queues->queues[i].processes[j].subprocess[1], all_queues->queues[i].processes[j].subprocess[2]); //TODO ADDED!
-
-                        if (all_queues->queues[i].processes[j].completed == all_queues->queues[i].processes[j].pos)
-                        {
-                            printf(" Change state to finished \n");
-                            changeState(&all_queues->queues[i].processes[j], 2);
-                        }
-
-                        if (i+1 != Q)
-                        {
-                            changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
-                            printf("Case 1 change queue \n");
-                            j--;
-                        }
-
-                        else
-                        {
-                            all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
-                        }
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
-                    }
-                    else if (all_queues->queues[i].processes[j].quantum_remaining < all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed])
-                    {
-//                        printf(" Case 2: Execute quantum time and reduce queue %i %i, %i\n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],i);
-                        printf(" Case 2: Execute process %i subprocess %i from queue %i for %i seconds \n",all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].completed, i, all_queues->queues[i].processes[j].quantum_remaining );
-                        clock = clock + all_queues->queues[i].processes[j].quantum_remaining;
-                        all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed] = all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]-all_queues->queues[i].processes[j].quantum_remaining;
-                        if (i+1 != Q)
-                        {
-                            changeQueue(&all_queues->queues[i], &all_queues->queues[i+1], &all_queues->queues[i].processes[j]);
-                            j--;
-                            printf("Case 2 change queue \n"); //TODO ADDED
-                        }
-
-                        else
-                        {
-                            all_queues->queues[i].processes[j].quantum_remaining =all_queues->queues[i].q;
-                        }
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
-                    }
-                    else
-                    {
-//                        printf(" Case 3: Execute process and stay in queue %i %i %i\n", all_queues->queues[i].processes[j].pid,  all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed],all_queues->queues[i].processes[j].completed);
-                        printf(" Case 3: Execute process %i subprocess %i from queue  %i for %i seconds \n",all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].completed, i, all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]);
-                        clock = clock + all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed];
-                        all_queues->queues[i].processes[j].quantum_remaining = all_queues->queues[i].processes[j].quantum_remaining - all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed];
-                        all_queues->queues[i].processes[j].subprocess[all_queues->queues[i].processes[j].completed]=0;//TODO ADDED!
-                        all_queues->queues[i].processes[j].completed ++;
-                        if (all_queues->queues[i].processes[j].completed == all_queues->queues[i].processes[j].pos)
-                        {
-                            printf(" Change state to finished \n");
-                            changeState(&all_queues->queues[i].processes[j], 2);
-                        }
-                        printf("Burst state for process %i: %i %i %i \n", all_queues->queues[i].processes[j].pid, all_queues->queues[i].processes[j].subprocess[0],
-                               all_queues->queues[i].processes[j].subprocess[1], all_queues->queues[i].processes[j].subprocess[2]); //TODO ADDED
-                        printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-                        printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-                        printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-
-                    }
-                }
-            }
-
-            if (executed==1)
-                break;
-
-            else if ( (executed == 0) && (i == Q-1 ) && (list->num_processes == 0)
-            { simulate = 0; }
-        }
-        usleep(100000);
-    }
-}

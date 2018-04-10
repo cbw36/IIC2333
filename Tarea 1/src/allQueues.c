@@ -11,6 +11,7 @@ AllQueues* initAllQueues(int size)
     AllQueues* all_queues = malloc(sizeof(AllQueues));
     all_queues->size = size;
     all_queues->pos = 0;
+    all_queues->total_process = 0;
     all_queues->queues =malloc(all_queues->size * sizeof(Queue));
     return all_queues;
 }

@@ -8,6 +8,7 @@ struct allQueues{
     struct queue* queues;
     int size;
     int pos;
+    int total_process;
 
 };
 

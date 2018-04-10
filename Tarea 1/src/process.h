@@ -19,6 +19,11 @@ struct process{
     int completed;  //number of subprocesses completed (also the index of current subprocess)
     int quantum_remaining;
     int arrival_time;
+    int cpu_turns;
+    int blocked;
+    int turnaround_time;
+    int response_time;
+    int waiting_time;
 };
 
 typedef struct process Process;

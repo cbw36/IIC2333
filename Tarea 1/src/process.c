@@ -17,6 +17,8 @@ Process* initProcess(int pid, int size, int arrival_time)
     process->completed = 0;
     process->quantum_remaining = 0;
     process->arrival_time = arrival_time;
+    process -> cpu_turns = 0;
+    
     return process;
 }
 
