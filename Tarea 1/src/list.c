@@ -23,7 +23,7 @@ void list_appendProcess(List* list, Process* process)
         list->size *= 2;
     }
     int position = 0;
-    if (list->num_processes == 0 || list->processes[list->num_processes - 1].arrival_time < process->arrival_time) {
+    if (list->num_processes == 0 || list->processes[list->num_processes - 1].arrival_time <= process->arrival_time) {
       list->processes[list->num_processes] = *process;
       if (list->num_processes == 0)
       {
@@ -33,7 +33,7 @@ void list_appendProcess(List* list, Process* process)
       {
         list->processes[list->num_processes].queue_pos = list->num_processes;
       }
-      list->num_processes += 1;
+      list->num_processes ++;
     }
     else{
     for (position = 0; position < list->num_processes; position++) {
@@ -54,7 +54,7 @@ int a;
   }
   list->processes[position] = *process;
   list->processes[position].queue_pos = position;
-  list->num_processes += 1;
+  list->num_processes ++;
 }
 
 Process* listremoveProces(List* list,Process* process)
