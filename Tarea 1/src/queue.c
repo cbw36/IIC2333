@@ -34,9 +34,10 @@ void appendProcess(Queue* queue, Process* process)
 Process* removeProcess(Queue* queue,Process* process)
 {
     int loc = process->queue_pos;
-    for (int ind = loc; ind < queue->size -1; ind++)
+    for (int ind = loc; ind < queue->num_processes -1; ind++)
     {
         queue->processes[ind] = queue->processes[ind + 1];
+        queue->processes[ind].queue_pos --;
     }
     queue->num_processes --;
     return process;
