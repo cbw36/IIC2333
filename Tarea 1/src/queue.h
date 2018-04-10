@@ -9,7 +9,6 @@
      int priority;
      int size;
      int num_processes;
-//     bool has_ready;
 
  };
 
@@ -20,7 +19,6 @@ Queue* initQueue(int priority, int q);
 void appendProcess(Queue* queue, Process* process);
 Process* removeProcess(Queue* queue,Process* process);
 void changeQueue(Queue* cur_queue, Queue* new_queue, Process* process);
-//bool hasReadyProcess(Queue* queue);
 
 
 #endif //TAREA_1_QUEUE_H

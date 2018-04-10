@@ -20,6 +20,7 @@ void appendQueue(AllQueues* all_queues,Queue* new_queue);
 AllQueues* initializeScheduler();
 void printState(AllQueues* all_queues);
 void MLFQV1(AllQueues* all_queues);
+void MLFQV2(AllQueues* all_queues);
 
 
 

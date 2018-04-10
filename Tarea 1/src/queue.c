@@ -12,7 +12,6 @@ Queue* initQueue(int priority, int q)
     queue-> processes = malloc(queue->size * sizeof(Process));
 
     queue->num_processes = 0;
-//    queue->has_ready = has_ready;
     return queue;
 
 }
@@ -34,9 +33,10 @@ void appendProcess(Queue* queue, Process* process)
 Process* removeProcess(Queue* queue,Process* process)
 {
     int loc = process->queue_pos;
-    for (int ind = loc; ind < queue->size -1; ind++)
+    for (int ind = loc; ind < queue->num_processes -1; ind++)
     {
         queue->processes[ind] = queue->processes[ind + 1];
+        queue->processes[ind].queue_pos --;
     }
     queue->num_processes --;
     return process;
@@ -48,3 +48,4 @@ void changeQueue(Queue* cur_queue, Queue* new_queue, Process* process)
     appendProcess(new_queue, process);
     removeProcess(cur_queue, process);
 }
+
