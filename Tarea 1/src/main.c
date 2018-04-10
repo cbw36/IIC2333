@@ -54,7 +54,7 @@ int main(int argc, char * argv[])
     printf("%i %i\n",list->processes[1].pid, list->processes[1].queue_pos );
     printf("%i %i\n",list->processes[2].pid, list->processes[2].queue_pos );
     printf("%i %i\n",list->processes[3].pid, list->processes[3].queue_pos );
-    listremoveProces(list, list->processes[3]);
+    listremoveProces(list, &list->processes[3]);
     printf("remove\n" );
     printf("%i\n",list->processes[0].pid );
     printf("%i\n",list->processes[1].pid );
@@ -113,13 +113,17 @@ void MLFQV1(AllQueues* all_queues, List* list)
     int simulate = 1;
     int clock = 0;
     int executed;
-    int g = 0;
-    for (g = 0; g < list-> num_processes; g++) {
-      printf("hola\n");
-    }
+
 
     while (simulate == 1)
-    {
+    {int g = 0;
+      for (g = 0; g < list-> num_processes; g++) {
+      if (clock> list->processes[g].arrival_time) {
+        appendProcess(&all_queues->queues[0], list->processes[g]);
+        listremoveProces(list, &list->processes[g])
+        g--;
+      };
+      }
         for (int i =0; i<Q; i++)
         {executed = 0;
 
@@ -198,7 +202,7 @@ void MLFQV1(AllQueues* all_queues, List* list)
             if (executed==1)
                 break;
 
-            else if ( (executed == 0) && (i == Q-1 ))
+            else if ( (executed == 0) && (i == Q-1 ) && (list->num_processes == 0)
             { simulate = 0; }
         }
         usleep(100000);
