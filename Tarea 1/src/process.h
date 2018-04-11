@@ -18,6 +18,7 @@ struct process{
     int queue_pos;  //location in queue its stored in
     int completed;  //number of subprocesses completed (also the index of current subprocess)
     int quantum_remaining;
+    int response_bool;
     int arrival_time;
     int cpu_turns;
     int blocked;

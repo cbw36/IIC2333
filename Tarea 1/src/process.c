@@ -22,6 +22,7 @@ Process* initProcess(int pid, int size, int arrival_time)
     process -> turnaround_time = 0;
     process -> response_time = 0;
     process -> waiting_time = 0;
+    process -> response_bool = 0;
 
 
     return process;
