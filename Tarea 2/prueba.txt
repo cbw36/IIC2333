@@ -1,0 +1,7 @@
+echo testing
+echo executing
+echo commands
+echo from
+echo uniform
+echo input
+echo file
