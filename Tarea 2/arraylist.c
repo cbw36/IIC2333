@@ -30,7 +30,17 @@ void arraylist_append(ArrayList* list, int element)
 
 }
 
-
+int arraylist_delete(ArrayList* list, int position)
+{int a;
+ int b;
+ b = list->list[position];
+ for (a = position; a<list->largo-1; a = a+1){
+     list->list[a]=list->list[a+1];
+ }
+ list->list[list->largo-1]= 0;
+ list->largo = list->largo-1;
+ return b;
+}
 /** Libera todos los recursos asociados a la lista */
 void arraylist_destroy(ArrayList* list)
 {free(list);

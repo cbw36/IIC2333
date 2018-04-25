@@ -28,6 +28,6 @@ ArrayList* arraylist_init();
 /** Inserta un elemento al final de la arraylist */
 void arraylist_append(ArrayList* list, int element);
 
-
+int arraylist_delete(ArrayList* list, int position);
 /** Libera todos los recursos asociados a la lista */
 void arraylist_destroy(ArrayList* list);
