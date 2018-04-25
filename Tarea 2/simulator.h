@@ -1,0 +1,6 @@
+#ifndef TAREA_2_SIMULATOR_H
+#define TAREA_2_SIMULATOR_H
+
+
+
+#endif //TAREA_2_SIMULATOR_H
