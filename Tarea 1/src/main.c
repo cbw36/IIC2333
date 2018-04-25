@@ -43,71 +43,75 @@ int main(int argc, char * argv[])
     List* list = initList();
     int pid = 0;
 
+//    int ret = fscanf(fr, "%s %i %i", name, &arrival, &num_p);
+//    printf("%i \n", ret);
+
     while (fscanf(fr, "%s %i %i", name, &arrival, &num_p) == 3) {
         Process* new_process = initProcess(pid, num_p, arrival);
         printf(" name %s arrival %d processes %d \n", name, arrival, num_p);
-        int *events = malloc(sizeof(int) * (num_p));
-        for (int i = 0; i < (num_p); i++) {
-            fscanf(fr, "%i", &events[i]);
-            subprocessAppend(new_process, events[i]);
-        }
-        list_appendProcess(list, new_process);
-        printf("num_proc = %i \n", list->num_processes);
-        pid ++;
-    }
-    printf("PRINT LIST BEFORE MODIFY: num_proc = %i \n", list->num_processes);
-    for (int i = 0; i< list->num_processes; i++)
-    {
-        printf("List index %i process % i = %i %i %i \n",i, list->processes[i].pid, list->processes[i].subprocess[0],  list->processes[i].subprocess[1],  list->processes[i].subprocess[2]);
-    }
-
-//    while(fscanf(fr, "%s %d %d", name, &arrival, &num_p) != EOF) {
-//        printf(" name %s arrival %d processes %d \n", name, arrival, num_p);
+//        int *events = malloc(sizeof(int) * (num_p));
+//        for (int i = 0; i < (num_p); i++) {
+//            fscanf(fr, "%i", &events[i]);
+//            subprocessAppend(new_process, events[i]);
+//        }
+//        list_appendProcess(list, new_process);
+//        printf("num_proc = %i \n", list->num_processes);
+//        pid ++;
 //    }
 
-//    List* list = initList();
-//    Process* new_process1 = initProcess(2, 3, 10);
-//    Process* new_process2 = initProcess(3, 3, 40);
-//    Process* new_process3 = initProcess(4, 3, 50);
-//    list_appendProcess(list, new_process);
-//    list_appendProcess(list, new_process1);
-//    list_appendProcess(list, new_process2);
-//    list_appendProcess(list, new_process3);
-
-    AllQueues* all_queues = initializeScheduler(list);
-////    printState(all_queues);
-    printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
-    printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
-    printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
-    printf("num processes %i \n", list->num_processes);
-    for (int i = 0; i< list->num_processes; i++)
-    {
-        printf("List index %i process % i = %i %i %i \n",i, list->processes[i].pid, list->processes[i].subprocess[0],  list->processes[i].subprocess[1],  list->processes[i].subprocess[2]);
-    }
-
-    if ((argc == 5)  && (strcmp(version, "v1") == 0) && (Q>0)) {
-        printf("Enter simulation in Version 1 \n");
-        MLFQV1(all_queues, list);
-    }
-    else if ((argc == 6)  && strcmp(version, "v2") == 0 && (Q>0)) {
-        char*raw_period = argv[5];
-        PERIOD = atoi(raw_period);
-        printf("Enter simulation in Version 2 \n");
-        MLFQV2(all_queues, list);
-    }
-    else if ((argc == 6)  && strcmp(version, "v3") == 0 && (Q>0)) {
-        char*raw_period = argv[5];
-        PERIOD = atoi(raw_period);
-        printf("Enter simulation in Version 3 \n");
-        MLFQV3(all_queues, list);
-    }
-    else
-        if ((strcmp(version, "v1") != 0) && (strcmp(version, "v2") != 0) && (strcmp(version, "v3") != 0))
-            printf("Improper Version specified.  Please specify either v1, v2, or v3 \n");
-        else if ((argc>6) || (argc<5) || ((argc == 6) && (strcmp(version, "v1") == 1)) || ((argc == 5) && (strcmp(version, "v2") == 1)) || ((argc == 5) && (strcmp(version, "v3") == 1)))
-            printf("Improper number of inputs \n");
-        else if( (Q>0))
-            printf("Q must be greater than 0 \n");
+//    printf("PRINT LIST BEFORE MODIFY: num_proc = %i \n", list->num_processes);
+//    for (int i = 0; i< list->num_processes; i++)
+//    {
+//        printf("List index %i process % i = %i %i %i \n",i, list->processes[i].pid, list->processes[i].subprocess[0],  list->processes[i].subprocess[1],  list->processes[i].subprocess[2]);
+//    }
+//
+////    while(fscanf(fr, "%s %d %d", name, &arrival, &num_p) != EOF) {
+////        printf(" name %s arrival %d processes %d \n", name, arrival, num_p);
+////    }
+//
+////    List* list = initList();
+////    Process* new_process1 = initProcess(2, 3, 10);
+////    Process* new_process2 = initProcess(3, 3, 40);
+////    Process* new_process3 = initProcess(4, 3, 50);
+////    list_appendProcess(list, new_process);
+////    list_appendProcess(list, new_process1);
+////    list_appendProcess(list, new_process2);
+////    list_appendProcess(list, new_process3);
+//
+//    AllQueues* all_queues = initializeScheduler(list);
+//////    printState(all_queues);
+//    printf("Queue 0 length = % i state = %i % i %i %i %i \n", all_queues->queues[0].num_processes, all_queues->queues[0].processes[0].pid,all_queues->queues[0].processes[1].pid,all_queues->queues[0].processes[2].pid,all_queues->queues[0].processes[3].pid,all_queues->queues[0].processes[4].pid);
+//    printf("Queue 1 length = % i state = %i % i %i %i %i \n", all_queues->queues[1].num_processes, all_queues->queues[1].processes[0].pid,all_queues->queues[1].processes[1].pid,all_queues->queues[1].processes[2].pid,all_queues->queues[1].processes[3].pid,all_queues->queues[1].processes[4].pid);
+//    printf("Queue 2 length = % i state = %i % i %i %i %i \n", all_queues->queues[2].num_processes, all_queues->queues[2].processes[0].pid,all_queues->queues[2].processes[1].pid,all_queues->queues[2].processes[2].pid,all_queues->queues[2].processes[3].pid,all_queues->queues[2].processes[4].pid);
+//    printf("num processes %i \n", list->num_processes);
+//    for (int i = 0; i< list->num_processes; i++)
+//    {
+//        printf("List index %i process % i = %i %i %i \n",i, list->processes[i].pid, list->processes[i].subprocess[0],  list->processes[i].subprocess[1],  list->processes[i].subprocess[2]);
+//    }
+//
+//    if ((argc == 5)  && (strcmp(version, "v1") == 0) && (Q>0)) {
+//        printf("Enter simulation in Version 1 \n");
+//        MLFQV1(all_queues, list);
+//    }
+//    else if ((argc == 6)  && strcmp(version, "v2") == 0 && (Q>0)) {
+//        char*raw_period = argv[5];
+//        PERIOD = atoi(raw_period);
+//        printf("Enter simulation in Version 2 \n");
+//        MLFQV2(all_queues, list);
+//    }
+//    else if ((argc == 6)  && strcmp(version, "v3") == 0 && (Q>0)) {
+//        char*raw_period = argv[5];
+//        PERIOD = atoi(raw_period);
+//        printf("Enter simulation in Version 3 \n");
+//        MLFQV3(all_queues, list);
+//    }
+//    else
+//        if ((strcmp(version, "v1") != 0) && (strcmp(version, "v2") != 0) && (strcmp(version, "v3") != 0))
+//            printf("Improper Version specified.  Please specify either v1, v2, or v3 \n");
+//        else if ((argc>6) || (argc<5) || ((argc == 6) && (strcmp(version, "v1") == 1)) || ((argc == 5) && (strcmp(version, "v2") == 1)) || ((argc == 5) && (strcmp(version, "v3") == 1)))
+//            printf("Improper number of inputs \n");
+//        else if( (Q>0))
+//            printf("Q must be greater than 0 \n");
 
     printf("exit simulation!\n");
 }
