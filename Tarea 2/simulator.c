@@ -1,4 +1,3 @@
-
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,9 +25,6 @@ int main(int argc, char * argv[])
     char* n_raw = argv[1];
     int n = atoi(n_raw );
     ArrayList* opt_bits = arraylist_init();
-
-
-
     int total = 0;
 
     for (int i = 1; i< ADDRESS_BITS - n + 2;i++)
@@ -44,7 +40,7 @@ int main(int argc, char * argv[])
                                 if (n > 4){
                                   for (int l = 1; l < ADDRESS_BITS - n + 3 - i - j - k; l ++) {
                                     int m = 20 - j-i-k-l;
-                                  
+
                                         if (j+i+k+l+m == 20 &&(total == 0 || total > pow(2, i)*j+(pow(2, j)*k)+(pow(2, k)*l)+(pow(2, l)*m)+(pow(2, m)*11)) ){
                                             if (total != 0) {
                                             arraylist_delete(opt_bits,4);
@@ -61,8 +57,6 @@ int main(int argc, char * argv[])
                                             arraylist_append(opt_bits, m);
 
                                         }
-
-
 
                                 }}
                                 else{
@@ -85,7 +79,6 @@ int main(int argc, char * argv[])
                                         break;
                                     }
                                 }
-
                         }}
                         else{
                           int k = 20 -j-i;
@@ -101,10 +94,7 @@ int main(int argc, char * argv[])
                                 arraylist_append(opt_bits, j);
                                 arraylist_append(opt_bits, k);
                             }
-
-
                     }
-
                 }
                 else{
                   //printf("%i %f\n",i,pow(2, i));
@@ -130,10 +120,7 @@ int main(int argc, char * argv[])
         else{
             arraylist_append(opt_bits, 20);
             break;
-
-
         }
-
 }
     for (int i = 0; i<n; i++)
     {
