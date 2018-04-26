@@ -9,115 +9,130 @@
 #include<sys/wait.h>
 #include <string.h>
 
+const int m = 3;
+
+int getNumLines(char* filepath)
+{
+    FILE*fr;
+    fr = fopen(filepath, "r");
+    int num_lines = 0;
+    char line[256];
+
+    while (fgets(line, 256, fr))
+    {
+        num_lines++;
+    }
+    fclose(fr);
+    return num_lines;
+}
+
+char *** processTextFile(char ** all_lines, int n)
+{
+    char *** processes;
+    processes = malloc(sizeof(char**)*n);
+
+    for (int i =0; i<n;i++)
+    {
+        if(strchr(all_lines[i], '"')!=NULL){ //Keep string inside "" together
+            processes[i] = malloc(sizeof(char *) * 20); //Assume less than 20 arguments
+            int ctr = 0;
+            int ind = 0;
+            processes[i][ctr] = malloc(sizeof(char) * 256);
+            for (int j = 0; j < strlen(all_lines[i]); j++) {
+                if (all_lines[i][j] == '"')
+                {
+                    j++;
+                    while (all_lines[i][j] != '"')
+                    {
+                        processes[i][ctr][ind] = all_lines[i][j];
+                        ind++;
+                        j++;
+                    }
+                    ctr++;
+                    j++;
+                }
+                else if (all_lines[i][j] == ' ' || all_lines[i][j] == '\0' || all_lines[i][j] == '\n') {
+                    processes[i][ctr][ind] = '\0';
+                    ctr++;
+                    processes[i][ctr] = malloc(sizeof(char) * 256);
+                    ind = 0;
+                } else {
+                    processes[i][ctr][ind] = all_lines[i][j];
+                    ind++;
+                }
+                processes[i][ctr + 1] = NULL;
+            }
+        }        else { // Read each value separated by space into the array
+            processes[i] = malloc(sizeof(char *) * 20); //Assume less than 20 arguments
+            int ctr = 0;
+            int ind = 0;
+            processes[i][ctr] = malloc(sizeof(char) * 256);
+            for (int j = 0; j < strlen(all_lines[i]); j++) {
+                if (all_lines[i][j] == ' ' || all_lines[i][j] == '\0' || all_lines[i][j] == '\n') {
+                    processes[i][ctr][ind] = '\0';
+                    ctr++;
+                    processes[i][ctr] = malloc(sizeof(char) * 256);
+                    ind = 0;
+                } else {
+                    processes[i][ctr][ind] = all_lines[i][j];
+                    ind++;
+                }
+                processes[i][ctr + 1] = NULL;
+            }
+        }
+    }
+    return processes;
+}
+
 
 int main(int argc, char * argv[])
 {
     char*filepath = argv[1];
+    int num_lines = getNumLines(filepath);
 
     FILE*fr;
     fr = fopen(filepath, "r");
-    int count = 0;
-    int status = 0;
 
-    char command[256];
-    char text[256];
+    int status = 0;
+    char ** all_lines;
+    all_lines = malloc(sizeof(char*)*num_lines);
+
+    for (int i =0; i<num_lines;i++)
+    {
+        all_lines[i]= malloc(256* sizeof(char));
+        fgets(all_lines[i],256, fr);
+    }
+
+    char*** processes = processTextFile(all_lines, num_lines);
+
+
     pid_t wpid;
-    while (fscanf(fr, "%s %s", command, text) != EOF) {
+    int proc_running = 0;
+    int proc_ran = 0;
+    while (proc_ran<num_lines) {
         printf("NEXT LINE\n");
+        proc_running ++;
         pid_t pid = fork();
         if (pid ==0)
         {
-            printf("processo %i, count = %i command = %s text = %s\n", getpid(), count, command, text);
-            execlp(command, command, text, NULL); }
-        else if (count>3) {
-            printf("wait for process, count = %i \n", count);
+            execvp(processes[proc_ran][0], processes[proc_ran]);
+            exit(0);
+        }
+        else if (proc_running==m) {
+            printf("wait for process, count = %i \n", proc_running);
+            proc_running --;
             wait(NULL);
-            count --;
+
         }
         else
         {
-            printf("Parent when count = %i\n", count);
+            printf("Parent when count = %i\n", proc_running);
         }
-        count ++;
+
+        proc_ran++;
+
 
     }
     while ((wpid = wait(&status)) > 0);
     return 0;
 }
-
-
-
-//int main(int argc, char * argv[])
-//{
-//    char*filepath = argv[1];
-//
-//    FILE*fr;
-//    fr = fopen(filepath, "r");
-//
-//    char command[256];
-//    char text[256];
-//
-//    while (fscanf(fr, "%s %s", command, text) != EOF) {
-//        pid_t pid = fork();
-//        if (pid ==0)
-//        {
-//            execlp("/bin/echo", command, text, NULL);
-//        }
-//        else
-//        {
-//            printf("wait for process \n");
-//            waitpid(pid, 0,0);
-//        }
-//    }
-//}
-
-/**
-void dummyFork()
-{
-    pid_t pid = fork();
-    if (pid ==0)
-    {
-        execl("bin/echo", command, text, NULL);
-        exit(127);
-    }
-    else
-    {
-        printf("waint for process");
-        waitpid(pid, 0,0);
-    }
-
-    char * args[] = {"echo", "something", NULL};
-    pid_t child1 = fork();
-    if (child1 == 0)
-    {
-        printf("CHILD: I am child process 1!\n");
-        printf("CHILD: Here's my PID: %d\n", getpid());
-        printf("CHILD: My parent's PID is: %d\n", getppid());
-        printf("CHILD: The value of my copy of childpid is: %d\n", child1);
-        execl("/bin/echo", "echo", "text", NULL);
-
-    }
-    else
-    {
-        printf("PARENT: I am the parent process waiting for child 1!\n");
-        printf("PARENT: Here's my PID: %d\n", getpid());
-        waitpid(child1, 0,0);
-    }
-    pid_t child2 = fork();
-    if (child2==0)
-    {
-        printf("CHILD: I am child process 2!\n");
-        printf("CHILD: Here's my PID: %d\n", getpid());
-        printf("CHILD: My parent's PID is: %d\n", getppid());
-        printf("CHILD: The value of my copy of childpid is: %d\n", child2);
-        execlp("/bin/ls", "ls",NULL);
-    }
-    else
-    {
-        printf("PARENT: I am the parent process waiting for child 2!\n");
-        printf("PARENT: Here's my PID: %d\n", getpid());
-        waitpid(child2, 0,0);
-    }
-    execlp("/bin/echo", "echo", "FinalParentEcho",NULL);
-}
-*/
