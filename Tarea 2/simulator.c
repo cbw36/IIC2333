@@ -8,6 +8,7 @@
 #include<sys/wait.h>
 #include <string.h>
 #include "arraylist.h"
+#include "pageList.h"
 
 
 const int OFFSET_BITS = 8;
@@ -114,4 +115,13 @@ int main(int argc, char * argv[])
     {
         printf("Bits for level %i = %i \n", i, opt_bits->list[i]);
     }
+
+    PageList* pages = pageList_init(n);
+    Tlb* tlb = tlb_init();
+
+    for (int i = 0; i<n; i++){
+      pages->list[i] = *page_init(opt_bits->list[i]);
+      printf("tamaño: %i\n", pages->list[i].size);
+    }
+
 }

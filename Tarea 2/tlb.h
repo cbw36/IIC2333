@@ -1,12 +1,13 @@
-typedef struct row{
+struct row{
   char direccion[20];
   char frame[8];
-}Row;
+};
+typedef struct row Row;
 
 
 struct tlb
 {
-    row* fila;
+    Row* fila;
     int size;
 };
 typedef struct tlb Tlb;

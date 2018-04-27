@@ -1,7 +1,10 @@
-#include <stdio.h>
+#include <stdlib.h>
+#include "pageTable.h"
 
-int main()
-{
 
+Page* page_init(int n)
+{ Page* page = malloc(sizeof(Page));
+  page ->size = n;
+  page->fila =malloc(page->size * sizeof(Row));
+  return page;
 }
-
