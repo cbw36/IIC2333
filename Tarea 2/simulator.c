@@ -125,3 +125,15 @@ int main(int argc, char * argv[])
     }
 
 }
+
+unsigned long convert(unsigned long dec)
+{
+    if (dec == 0)
+    {
+        return 0;
+    }
+    else
+    {
+        return ((dec % 2) + 10 * convert(dec / 2));
+    }
+}

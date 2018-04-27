@@ -56,12 +56,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="simulator.c" pinned="false" current-in-tab="false">
+      <file leaf-file-name="simulator.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/simulator.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-754">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="360">
+              <caret line="138" column="1" lean-forward="false" selection-start-line="138" selection-start-column="1" selection-end-line="138" selection-end-column="1" />
+              <folding>
+                <element signature="e#368#5108#0" expanded="false" />
+                <element signature="e#5110#5275#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -76,11 +79,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pageTable.c" pinned="false" current-in-tab="true">
+      <file leaf-file-name="pageTable.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pageTable.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="135">
+              <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -117,11 +120,11 @@
         <option value="$PROJECT_DIR$/arraylist.h" />
         <option value="$PROJECT_DIR$/simulator.h" />
         <option value="$PROJECT_DIR$/arraylist.c" />
-        <option value="$PROJECT_DIR$/simulator.c" />
         <option value="$PROJECT_DIR$/test.txt" />
         <option value="$PROJECT_DIR$/doer.c" />
         <option value="$PROJECT_DIR$/pageTable.h" />
         <option value="$PROJECT_DIR$/pageTable.c" />
+        <option value="$PROJECT_DIR$/simulator.c" />
       </list>
     </option>
   </component>
@@ -206,12 +209,12 @@
       <workItem from="1524677387696" duration="18000" />
       <workItem from="1524677419161" duration="28579000" />
       <workItem from="1524766882517" duration="51000" />
-      <workItem from="1524779356251" duration="7725000" />
+      <workItem from="1524779356251" duration="7794000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="60863000" />
+    <option name="totallyTimeSpent" value="60932000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1023" extended-state="6" />
@@ -469,10 +472,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/simulator.c">
+    <entry file="file://$PROJECT_DIR$/pageTable.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-754">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        <state relative-caret-position="135">
+          <caret line="9" column="1" lean-forward="true" selection-start-line="9" selection-start-column="1" selection-end-line="9" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -485,11 +488,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pageTable.c">
+    <entry file="file://$PROJECT_DIR$/simulator.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+        <state relative-caret-position="360">
+          <caret line="138" column="1" lean-forward="false" selection-start-line="138" selection-start-column="1" selection-end-line="138" selection-end-column="1" />
+          <folding>
+            <element signature="e#368#5108#0" expanded="false" />
+            <element signature="e#5110#5275#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
