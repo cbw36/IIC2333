@@ -1,19 +1,8 @@
 echo primero
+./failFunction
 echo segundo
 echo tercero
 echo cuarto
 echo quinto
 echo sexto
 echo septimo
-echo octavo
-echo noveno
-echo decimo
-echo onceavo
-echo doceavo
-echo treceavo
-echo catorceavo
-echo quinceavo
-echo dieciseisavo
-ps T
-ls -al
-date "+DATE: %Y-%m-%d%nTIME: %H:%M:%S"

@@ -1,5 +1,4 @@
 #include "doer.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -105,30 +104,50 @@ int main(int argc, char * argv[])
 
     char*** processes = processTextFile(all_lines, num_lines);
 
+    pid_t * all_pids;
+    all_pids = malloc(num_lines * sizeof(pid_t));
+    int * proc_num_execs;
+    proc_num_execs = malloc(num_lines * sizeof(int));
 
     pid_t wpid;
     int proc_running = 0;
     int proc_ran = 0;
     while (proc_ran<num_lines) {
-        printf("NEXT LINE\n");
         proc_running ++;
         pid_t pid = fork();
         if (pid ==0)
         {
             execvp(processes[proc_ran][0], processes[proc_ran]);
-            exit(0);
+            exit(-1);
         }
         else if (proc_running==m) {
-            printf("wait for process, count = %i \n", proc_running);
             proc_running --;
-            wait(NULL);
-
+            int status;
+            pid_t cur_pid = wait(&status);
+            printf("STATUS = %i for pid %i \n", status, (int) cur_pid);
+            if (!WIFEXITED(status)) // find process index to see if it has been executed twice
+            {
+                printf("FAILED PROCESS\n");
+                for (int i = 0; i <num_lines;i++)
+                {
+                    if ((all_pids[i] == cur_pid) && (proc_num_execs[i] != 1))
+                    {
+                        printf("Process %i failed, run again\n", i);
+                        pid_t pid = fork();
+                        if (pid ==0)
+                        {
+                            execvp(processes[i][0], processes[i]);
+                            proc_num_execs[i] = 1;
+                        }
+                        else
+                        {
+                            wait(NULL);
+                        }
+                    }
+                }
+            }
         }
-        else
-        {
-            printf("Parent when count = %i\n", proc_running);
-        }
-
+        all_pids[proc_ran] = pid;
         proc_ran++;
 
 

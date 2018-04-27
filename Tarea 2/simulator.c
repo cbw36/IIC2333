@@ -151,6 +151,7 @@ ArrayList* getOptBits(int n){
     return opt_bits;
 }
 
+
 char** getVirtAddresses(char* filepath)
 {
     FILE*fr;
