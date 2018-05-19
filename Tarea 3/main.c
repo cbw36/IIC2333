@@ -1,27 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "cz_API.h"
+
 
 
 int main(int argc, char * argv[])
-{
-    unsigned char buffer[2048000];
-    FILE *bin;
-
-    bin = fopen("simdiskformat.bin","rb");  // r for read, b for binary
-
-    fread(buffer,sizeof(buffer),1,bin);
-
-
-    for(int i = 0; i<10; i++)
-        printf("%u ", buffer[i]);
-    printf("%u ", buffer[1000]);
-    printf("%u ", buffer[2000]);
-    printf("%u ", buffer[3000]);
-    printf("%u ", buffer[4000]);
-
-
-
+{  cz_init("hola", 5, "hola2");
     return 1;
-
 }
-

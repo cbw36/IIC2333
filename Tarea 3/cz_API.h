@@ -10,7 +10,7 @@ struct czFILE
 typedef struct czFILE czFile;
 
 
-
+czFile* cz_init(char* name, int size, char* data);
 czFile* cz_open(char* filename, char mode);
 
 
