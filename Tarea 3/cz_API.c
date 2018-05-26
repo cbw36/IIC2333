@@ -403,5 +403,5 @@ void cz_ls()
 }
 
 int cz_write(struct czFILE* file_desc, void* buffer, int nbytes){
-   printf("%c\n", file_desc-> direccion_indice[0]);
+   //printf("%c\n", file_desc-> direccion_indice[0]);
 }
