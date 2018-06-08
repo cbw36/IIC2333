@@ -24,7 +24,7 @@ struct openFiles
 };
 typedef struct openFiles openFiles;
 
-
+extern char* disk_path;
 void disk_init();
 int cz_exists(char* filename);
 czFile* cz_open(char* filename, char mode);

@@ -10,7 +10,7 @@
 void disk_init()
 {
     FILE *bin;
-    bin = fopen("simdiskformat.bin","r+");  // Write first 9 bitmaps as 1 (FF80) for the directory and bitmap blocks
+    bin = fopen(disk_path,"r+");  // Write first 9 bitmaps as 1 (FF80) for the directory and bitmap blocks
     unsigned char directory[1024];
     unsigned char bitmap[8094];
 
@@ -26,7 +26,8 @@ void disk_init()
     fclose(bin);
 }
 
-czFile* cz_init(char* name) {
+czFile* cz_init(char* name)
+ {
     FILE *bin;
     unsigned char bitmap[8192];
     unsigned char directory[1024];
@@ -41,8 +42,7 @@ czFile* cz_init(char* name) {
             new_directory[i] = name[i - 1];
         }
     }
-
-    bin = fopen("simdiskformat.bin", "r+");  // open bin to find location of next available block from bitmap
+    bin = fopen(disk_path, "r+");  // open bin to find location of next available block from bitmap
 
     int block_index = findNextAvailable(0);  //Address of the index block for the file
     printf("New file's block index at location %i or %x\n", block_index,block_index);
@@ -61,7 +61,6 @@ czFile* cz_init(char* name) {
     unsigned char aux1[4] = {first[3], first[2], first[1], first[0]};
     fseek(bin, dir_index * 16 +12, SEEK_SET);
     fwrite(aux1, sizeof(unsigned char), 4, bin);
-
 
     fseek(bin, block_index*1024, SEEK_SET);
     int t = time(NULL);
@@ -113,7 +112,7 @@ int cz_exists(char* filename) /** Tested and Finished*/
 {
     FILE *bin;
     unsigned char directory[1024];
-    bin = fopen("simdiskformat.bin","r+");
+    bin = fopen(disk_path,"r+");
     fread(directory, sizeof(directory), 1, bin);
     for (int i = 0; i < 64; i++) {
         int bit_actual = 16*i;
@@ -148,7 +147,7 @@ czFile* cz_open(char* filename, char mode) //TODO What does it mean to be open? 
 {
   FILE *bin;
   unsigned char directory[1024];
-  bin = fopen("simdiskformat.bin","r+");
+  bin = fopen(disk_path,"r+");
   fread(directory, sizeof(directory), 1, bin);
   int equal = 0;
 
@@ -213,7 +212,7 @@ int cz_mv(char* orig, char *dest)
   if (cz_exists(orig) && !cz_exists(dest)) {
     FILE *bin;
     unsigned char directory[1024];
-    bin = fopen("simdiskformat.bin","r+");
+    bin = fopen(disk_path,"r+");
     fread(directory, sizeof(directory), 1, bin);
     int equal = 0;
     for (int i = 0; i < 64; i++) {
@@ -262,11 +261,13 @@ void cz_ls() /** Tested and Finished*/
 {
   FILE *bin;
   unsigned char directory[1024];
-  bin = fopen("simdiskformat.bin","r+");
+  bin = fopen(disk_path,"r+");
   fread(directory, sizeof(directory), 1, bin);
+  printf("entro a ls\n" );
   for (int i = 0; i < 64; i++) {
     int bit_actual = 16*i;
     if (directory[bit_actual]=='\x01'){
+      printf("%c\n",directory[bit_actual] );
       bit_actual++;
       int size;
       size = 10;
@@ -291,7 +292,7 @@ int cz_write(struct czFILE* file_desc, char* buffer, int nbytes)  /**Functional,
     file_desc->mode_w = 1;
 
     FILE *bin;
-    bin = fopen("simdiskformat.bin","r+");
+    bin = fopen(disk_path,"r+");
     char index_block[1024];
     char * cur_data_block;
 
@@ -400,7 +401,7 @@ int cz_read(struct czFILE* file_desc, char* buffer, int nbytes)  //TODO TEST!
         file_desc->mode_r = 1;
 
         FILE *bin;
-        bin = fopen("simdiskformat.bin","r+");
+        bin = fopen(disk_path,"r+");
         char index_block[1024];
         char *cur_data_block;
 
@@ -469,13 +470,99 @@ int cz_close(struct czFILE* file_desc)  //TODO Update
 
 
 int cz_cp(char* orig, char* dest)  //TODO
-{
-  
+{ if (cz_exists(orig) && !cz_exists(dest)){
+    char* buffer1;
+    cz_read(cz_open(orig, 'r'), buffer1,508*1024);
+    cz_write(cz_open(dest, 'w'), buffer1, 508*1024);
+    return 0;
+}
+
+
   return -1;
 }
 
 int cz_rm(char* filename){ //TODO
-  return -1;
+  if (cz_exists(filename)){
+    FILE *bin;
+    unsigned char directory[1024];
+    bin = fopen(disk_path,"r+");
+    fread(directory, sizeof(directory), 1, bin);
+    int equal = 0;
+    for (int i = 0; i < 64; i++) {
+      int bit_actual = 16*i;
+      int equal = 1;
+      if (directory[bit_actual]=='\x01'){
+        bit_actual++;
+        int size;
+        if (strlen(filename)< 11){
+          size = strlen(filename);
+        }
+        else {
+          size = 10;
+        }
+        for (int j = 0; j < size; j++) {
+          if (filename[j] != directory[bit_actual+j]){
+            equal = 0;
+          }
+        }
+      if (directory[bit_actual+size]!= '\x00'){
+        equal = 0;
+      }
+      bit_actual = bit_actual + 11;
+      if (equal == 1){
+        fseek(bin, i*16+14, SEEK_SET);
+        int num_indice1[1];
+        int num_indice2[1];
+        fread(num_indice1, 1, 1, bin);
+        fread(num_indice2, 1, 1, bin);
+        printf("num indice1:%i num indice1:%i\n", num_indice1[0], num_indice2[0]);
+        int old_bin_name1[8] = {0, 0, 0, 0, 0, 0, 0, 0};  //Convert name to binary
+        int *bin_name1= malloc(8*sizeof(int));
+        int old_bin_name2[8] = {0, 0, 0, 0, 0, 0, 0, 0};  //Convert name to binary
+        int *bin_name2=malloc(8*sizeof(int));
+        dec_to_bin(num_indice1[0], old_bin_name1, 7);
+        dec_to_bin(num_indice2[0], old_bin_name2, 7);
+        int bin_name_final[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+        int count = 0;
+        for (int y = 0; y < 8; y++) {
+          bin_name_final[count] = old_bin_name1[y];
+          count ++;
+        }
+        for (int y = 0; y < 8; y++) {
+          bin_name_final[count] = old_bin_name2[y];
+          count++;
+        }
+        int addr_dec1 = 0;
+        for (int j = 0; j < 16; j++)
+          addr_dec1 += pow(2, j) * bin_name_final[15 - j];
+        int arr_addr_dec1[1] = {addr_dec1};
+
+
+        fseek(bin, i*16, SEEK_SET);
+        char* reset = malloc(16);
+        for (int k = 0; k < 16; k++) {
+          reset[k] = '\x00';
+        }
+        fwrite(reset,sizeof(char),16,bin);
+        int aux2 = ((i+9)/8);
+        fseek(bin, (1024+aux2), SEEK_SET);
+        int read[1];
+        fread(read, 1, 1, bin);
+        int old_bin_name[8] = {0, 0, 0, 0, 0, 0, 0, 0};  //Convert name to binary
+        int *bin_name;
+        bin_name = dec_to_bin(read[0], old_bin_name, 7);
+        old_bin_name[(i+9)%8] = 0;
+        fseek(bin, (1024+aux2), SEEK_SET);
+        int addr_dec = 0;
+        for (int j = 0; j < 8; j++)
+          addr_dec += pow(2, j) * old_bin_name[7 - j];
+        int arr_addr_dec[1] = {addr_dec};
+        fwrite(arr_addr_dec, sizeof(int), 1, bin);
+  }
+}
+}
+}
+  return 0;
 }
 
 

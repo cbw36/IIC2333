@@ -1,5 +1,4 @@
 #include "helperFunctions.h"
-#include "cz_API.h"
 
 
 /**
@@ -109,6 +108,9 @@ char* hex_to_bin(char hex)
 
 int * dec_to_bin(int dec_name, int*bin_name, int ind)
 {
+    if (dec_name == 0){
+      return bin_name;
+    }
     if (dec_name == 1)
     {
         bin_name[ind] = 1;
@@ -140,7 +142,7 @@ int * dec_to_bin(int dec_name, int*bin_name, int ind)
 int findNextAvailable(int data_bool)
 {
     FILE *bin;
-    bin = fopen("simdiskformat.bin", "r+");  // open bin to find location of next available block from bitmap
+    bin = fopen(disk_path, "r+");  // open bin to find location of next available block from bitmap
 
     if (data_bool == 0){
         unsigned char bitmap[8192];
