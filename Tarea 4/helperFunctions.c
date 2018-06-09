@@ -93,6 +93,7 @@ int* binToInt(char* bin){
   return msg_vals;
 }
 
+
 char* getRivMsg(char* riv_name, char* resp_id)
 {
 
@@ -122,3 +123,4 @@ char* getRivMsg(char* riv_name, char* resp_id)
 
 
 //    printf("%c%c%c%c%c%c%c%c\n",bin[i],bin[i+1],bin[i+2],bin[i+3],bin[i+4],bin[i+5],bin[i+6],bin[i+7]);
+
