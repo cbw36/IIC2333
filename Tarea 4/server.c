@@ -44,7 +44,7 @@ int main(int argc , char *argv[])
     //Prepare the sockaddr_in structure
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY; //IP address
-    server.sin_port = htons( 8888 ); // IP port
+    server.sin_port = htons( 8080 ); // IP port
 
     //Bind socket to address and port number specified above
     if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0) //(sockfd, sockaddr, addrlen)
@@ -102,9 +102,11 @@ void *connection_handler(void *socket_desc)
     int read_size;
     char *message;
     char * client_message;
+    int booleano = 0;
+    int cambio =0;
     client_message = malloc(20* sizeof(char));
     /** Step 1: get nickname  **/
-    char* msg = "0000001000000000";
+    char* msg = "0000001100000000";
     write(sock, msg, 96 * sizeof(char));
     puts("sent query");
 //    read_size = recv(sock , name_msg_res , 2000 , 0); //TODO how is it time independent lol?
@@ -114,16 +116,18 @@ void *connection_handler(void *socket_desc)
 
 
    while( (read_size = recv(sock , client_message, 20 , 0)) > 0 )//(socket, buffer, length, flags)
+
    {
-       for (int i = 0; i < count; i++) {
+       if (count_named != 2)
+       {for (int i = 0; i < count; i++) {
          if (players[i]->id == sock){
            players[i]->name = client_message;
            count_named ++;
          }
          printf("nombre:%s, count_named:%i\n", players[i]->name, count_named);
-       }
-       if (count_named == 2){
-
+       }}
+       if (count_named == 2 && booleano == 0){
+           booleano = 1;
            write(players[0]->id, "se a encontado rival: \n" , 20);
            sleep(1);
            write(players[0]->id, players[1]->name, 20);
@@ -135,8 +139,19 @@ void *connection_handler(void *socket_desc)
            write(players[0]->id, "00000110000000100000001111101000", 80);
            sleep(1);
            players[0]-> pot = 1000;
-           players[1]-> pot = 1000;
-           while (players[0]-> pot>10 && players[0]->pot >10) {
+           players[1]-> pot = 1000;}
+       char* id = malloc(8);
+       if (strlen(client_message)>7) {
+         for (int i = 0; i < 8; i++) {
+           id[i] = client_message[i];
+         }
+       }
+       printf("client_message%s\n", id);
+       if (strncmp(id, "00001100", 8) == 0)
+       { cambio =1;
+         printf("Cambio Recibido\n");
+       }
+      if (count_named == 2 && booleano == 1 && cambio ==0){
              int* value_player1 = malloc(16*sizeof(int));
              int* value_player2 = malloc(16*sizeof(int));
              value_player1 = dec_to_bin(players[0]-> pot, value_player1, 15);
@@ -192,12 +207,12 @@ void *connection_handler(void *socket_desc)
              }
              write(players[0]->id, msgCardsPlayer1, 80);
              write(players[1]->id, msgCardsPlayer2, 80);
-             break;
+             sleep(1);
 
            }
 
        }
-   }
+
 
    if(read_size == 0)
    {

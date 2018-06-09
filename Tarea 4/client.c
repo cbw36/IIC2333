@@ -8,6 +8,8 @@
 #include<arpa/inet.h> //inet_addr
 #include"helperFunctions.c"
 #include"player.h"
+#include <time.h>
+#include<unistd.h>
 
 char*getName(char* resp_id);
 int * messageToBytes(int message);
@@ -28,7 +30,7 @@ int main(int argc , char *argv[])
 
     server.sin_addr.s_addr = inet_addr("127.0.0.1");
     server.sin_family = AF_INET;
-    server.sin_port = htons( 8888 );
+    server.sin_port = htons( 8080 );
 
     //Connect to remote server
     if (connect(sock , (struct sockaddr *)&server , sizeof(server)) < 0)
@@ -46,7 +48,6 @@ int main(int argc , char *argv[])
 
         if( recv(sock , name_query , 4000, 0) > 0)
         {
-//            printf("%s\n", name_query);
             char* id = malloc(8);
             if (strlen(name_query)>8) {
               for (int i = 0; i < 8; i++) {
@@ -54,7 +55,7 @@ int main(int argc , char *argv[])
               }
             }
 
-            if (strncmp(id, "00000010", 8) == 0)
+            if (strncmp(id, "00000011", 8) == 0)
             {
               char* name;
               char* resp_id = "00000100";
@@ -80,8 +81,17 @@ int main(int argc , char *argv[])
             }
             if (strncmp(id, "00001010", 8) == 0)
             {
-                
+                int* decode = binToInt(name_query);
+                for (int i = 1; i < 5; i++) {
+                  printf("Card%i value:%i shape:%i\n", i ,decode[2*i],decode[2*i+1]);
+                }
                 puts("Se a entregado las 5 cartas");
+                sleep(1);
+                if( send(sock , "00001100" , 17 , 1) < 0)
+                {
+                  puts("Send failed");
+                  return 1;
+                }
             }
             //int * msg_digits = malloc(20);
             //msg_digits = messageToBytes(name_query);
@@ -163,4 +173,3 @@ int * messageToBytes(int message)
 
     return digits;
 }
-

@@ -92,5 +92,3 @@ int* binToInt(char* bin){
   }
   return msg_vals;
 }
-
-//    printf("%c%c%c%c%c%c%c%c\n",bin[i],bin[i+1],bin[i+2],bin[i+3],bin[i+4],bin[i+5],bin[i+6],bin[i+7]);
