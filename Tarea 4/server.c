@@ -101,7 +101,7 @@ void *connection_handler(void *socket_desc)
     client_message = malloc(20* sizeof(char));
 
     /** Step 1: get nickname  **/
-    char* msg = "000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+    char* msg = "0000001000000000";
     write(sock, msg, 96 * sizeof(char));
     puts("sent query");
 //    read_size = recv(sock , name_msg_res , 2000 , 0); //TODO how is it time independent lol?
@@ -120,7 +120,6 @@ void *connection_handler(void *socket_desc)
          printf("nombre:%s, count_named:%i\n", players[i]->name, count_named);
        }
        if (count_named == 2){
-           printf("sock:%i %i\n",sock, players[1]->id);
 
            write(players[0]->id, "se a encontado rival: \n" , 20);
            sleep(1);
@@ -129,8 +128,8 @@ void *connection_handler(void *socket_desc)
            sleep(1);
            write(players[1]->id, players[0]->name, 20);
            sleep(1);
-           write(players[1]->id, "Se te ha otorgado los 1000 pesos\n", 80);
-           write(players[0]->id, "Se te ha otorgado los 1000 pesos\n", 80);
+           write(players[1]->id, "00000110000000100000001111101000", 80);
+           write(players[0]->id, "00000110000000100000001111101000", 80);
            players[0]-> pot = 1000;
            players[1]-> pot = 1000;
 

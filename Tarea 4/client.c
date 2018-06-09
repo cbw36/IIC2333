@@ -62,8 +62,10 @@ int main(int argc , char *argv[])
                 return 1;
               }
             }
-
-            //execMsgReq(id);
+            if (strncmp(id, "00000110", 8) == 0)
+            {
+                puts("Se te han otorgado 1000 dolares");
+            }
             //int * msg_digits = malloc(20);
             //msg_digits = messageToBytes(name_query);
             //printf("%i, %i, %i\n", msg_digits[0], msg_digits[1],msg_digits[2]);
@@ -120,10 +122,3 @@ int * messageToBytes(int message)
     }
     return digits;
 }
-
-// void execMsgReq(char* id)
-// {
-//   if (id = "00000010")
-//     ;
-//
-// }
