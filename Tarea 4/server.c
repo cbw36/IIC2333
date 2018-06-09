@@ -10,15 +10,19 @@
 #include<unistd.h>    //write
 #include<pthread.h> //for threading , link with lpthread
 #include"player.h"
+#include <time.h>
 
 //the thread function
+char* decCard_tobin(int value);
 void *connection_handler(void *);
 Player** players;
+Card** deck;
 int count;
 int count_named;
 
+
 int main(int argc , char *argv[])
-{
+{   deck = malloc(52*sizeof(Card));
     players = malloc(2*sizeof(Player));
     int socket_desc , client_sock , c , *new_sock;
     struct sockaddr_in server , client;
@@ -116,14 +120,17 @@ void *connection_handler(void *socket_desc)
          printf("nombre:%s, count_named:%i\n", players[i]->name, count_named);
        }
        if (count_named == 2){
-            printf("sock:%i %i\n",sock, players[1]->id);
-          write(players[0]->id, "Se te ha otorgado los 1000 pesos\n", 40);
-           write(players[0]->id, "se a encontado rival: \n" , 20);
-           write(players[0]->id, players[1]->name, 20);
+           printf("sock:%i %i\n",sock, players[1]->id);
 
+           write(players[0]->id, "se a encontado rival: \n" , 20);
+           sleep(1);
+           write(players[0]->id, players[1]->name, 20);
            write(players[1]->id, "se a encontado rival: \n" , 20);
+           sleep(1);
            write(players[1]->id, players[0]->name, 20);
-           write(players[1]->id, "Se te ha otorgado los 1000 pesos\n", 40);
+           sleep(1);
+           write(players[1]->id, "Se te ha otorgado los 1000 pesos\n", 80);
+           write(players[0]->id, "Se te ha otorgado los 1000 pesos\n", 80);
            players[0]-> pot = 1000;
            players[1]-> pot = 1000;
 
@@ -144,4 +151,81 @@ void *connection_handler(void *socket_desc)
    free(socket_desc);
 
     return 0;
+}
+
+void init_deck(){
+
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 13; i++) {
+      Card* card = malloc(sizeof(Card));
+      card->value = decCard_tobin(j+1);
+      card->used = 0;
+      card->shape = decCard_tobin(i+1);
+      deck[i*13+j] = card;
+    }
+  }
+}
+
+void resetDeck() {
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 13; i++) {
+      deck[i*13+j]->used = 0;
+    }}
+}
+
+Card** hand(){
+  Card** handPlayer = malloc(5*sizeof(Card));
+  int cantidad = 0;
+  while (cantidad < 5) {
+    int random = rand();
+    if (deck[random%52]->used == 0) {
+      deck[random%52]->used = 1;
+      handPlayer[cantidad] = deck[random%52];
+      cantidad ++;
+    }
+
+  }
+  return handPlayer;
+}
+
+char* decCard_tobin(int value){
+  if (value == 1) {
+    return "00000001";
+  }
+  else if (value == 2) {
+    return "00000010";
+  }
+  else if (value == 3) {
+    return "00000011";
+  }
+  else if (value == 4) {
+    return "00000100";
+  }
+  else if (value == 5) {
+    return "00000101";
+  }
+  else if (value == 6) {
+    return "00000110";
+  }
+  else if (value == 7) {
+    return "00000111";
+  }
+  else if (value == 8) {
+    return "00001000";
+  }
+  else if (value == 9) {
+    return "00001001";
+  }
+  else if (value == 10) {
+    return "00001010";
+  }
+  else if (value == 11) {
+    return "00001011";
+  }
+  else if (value == 12) {
+    return "00001100";
+  }
+  else if (value == 13) {
+    return "00001101";
+  }
 }
