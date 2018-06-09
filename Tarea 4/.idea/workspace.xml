@@ -23,11 +23,11 @@
       <file leaf-file-name="server.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/server.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="453">
-              <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+            <state relative-caret-position="425">
+              <caret line="139" column="24" lean-forward="true" selection-start-line="139" selection-start-column="24" selection-end-line="139" selection-end-column="24" />
               <folding>
-                <element signature="e#8003#8302#0" expanded="false" />
-                <element signature="e#8304#9012#0" expanded="false" />
+                <element signature="e#8778#9486#0" expanded="false" />
+                <marker date="1528586893000" expanded="false" signature="8490:8776" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -36,8 +36,8 @@
       <file leaf-file-name="client.c" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1269">
-              <caret line="119" column="29" lean-forward="true" selection-start-line="119" selection-start-column="29" selection-end-line="119" selection-end-column="29" />
+            <state relative-caret-position="1479">
+              <caret line="133" column="29" lean-forward="true" selection-start-line="133" selection-start-column="29" selection-end-line="133" selection-end-column="29" />
               <folding />
             </state>
           </provider>
@@ -50,7 +50,6 @@
               <caret line="87" column="36" lean-forward="true" selection-start-line="87" selection-start-column="36" selection-end-line="87" selection-end-column="36" />
               <folding>
                 <element signature="e#219#818#0" expanded="false" />
-                <element signature="e#2165#2808#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -77,6 +76,7 @@
       <find>server_reply</find>
       <find>printf</find>
       <find>puts</find>
+      <find>booleano</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
@@ -162,7 +162,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32819000" />
+    <option name="totallyTimeSpent" value="33100000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1680" height="1023" extended-state="6" />
@@ -217,8 +217,8 @@
         <state relative-caret-position="1200">
           <caret line="80" column="1" lean-forward="true" selection-start-line="80" selection-start-column="1" selection-end-line="80" selection-end-column="1" />
           <folding>
-            <element signature="e#8003#8302#0" expanded="false" />
-            <element signature="e#8304#9012#0" expanded="false" />
+            <element signature="e#8778#9486#0" expanded="false" />
+            <marker date="1528586893000" expanded="false" signature="8490:8776" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -229,7 +229,6 @@
           <caret line="5" column="54" lean-forward="false" selection-start-line="5" selection-start-column="54" selection-end-line="5" selection-end-column="54" />
           <folding>
             <element signature="e#219#818#0" expanded="false" />
-            <element signature="e#2165#2808#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -255,8 +254,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#8003#8302#0" expanded="false" />
-            <element signature="e#8304#9012#0" expanded="false" />
+            <element signature="e#8778#9486#0" expanded="false" />
+            <marker date="1528586893000" expanded="false" signature="8490:8776" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -293,7 +292,6 @@
           <caret line="5" column="54" lean-forward="false" selection-start-line="5" selection-start-column="54" selection-end-line="5" selection-end-column="54" />
           <folding>
             <element signature="e#219#818#0" expanded="false" />
-            <element signature="e#2165#2808#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -319,8 +317,8 @@
         <state relative-caret-position="478">
           <caret line="121" column="16" lean-forward="false" selection-start-line="121" selection-start-column="16" selection-end-line="121" selection-end-column="16" />
           <folding>
-            <element signature="e#8003#8302#0" expanded="false" />
-            <element signature="e#8304#9012#0" expanded="false" />
+            <element signature="e#8778#9486#0" expanded="false" />
+            <marker date="1528586893000" expanded="false" signature="8490:8776" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -330,8 +328,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#8003#8302#0" expanded="false" />
-            <element signature="e#8304#9012#0" expanded="false" />
+            <element signature="e#8778#9486#0" expanded="false" />
+            <marker date="1528586893000" expanded="false" signature="8490:8776" ph="{...}" />
           </folding>
         </state>
       </provider>
@@ -372,8 +370,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/client.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1269">
-          <caret line="119" column="29" lean-forward="true" selection-start-line="119" selection-start-column="29" selection-end-line="119" selection-end-column="29" />
+        <state relative-caret-position="1479">
+          <caret line="133" column="29" lean-forward="true" selection-start-line="133" selection-start-column="29" selection-end-line="133" selection-end-column="29" />
           <folding />
         </state>
       </provider>
@@ -384,18 +382,17 @@
           <caret line="87" column="36" lean-forward="true" selection-start-line="87" selection-start-column="36" selection-end-line="87" selection-end-column="36" />
           <folding>
             <element signature="e#219#818#0" expanded="false" />
-            <element signature="e#2165#2808#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="453">
-          <caret line="123" column="0" lean-forward="false" selection-start-line="123" selection-start-column="0" selection-end-line="123" selection-end-column="0" />
+        <state relative-caret-position="425">
+          <caret line="139" column="24" lean-forward="true" selection-start-line="139" selection-start-column="24" selection-end-line="139" selection-end-column="24" />
           <folding>
-            <element signature="e#8003#8302#0" expanded="false" />
-            <element signature="e#8304#9012#0" expanded="false" />
+            <element signature="e#8778#9486#0" expanded="false" />
+            <marker date="1528586893000" expanded="false" signature="8490:8776" ph="{...}" />
           </folding>
         </state>
       </provider>
