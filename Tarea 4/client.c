@@ -39,14 +39,35 @@ int main(int argc , char *argv[])
     //keep communicating with server
     while(1)
     {
-        int name_query;
+        char* name_query;
+        name_query = malloc(sizeof(char)*4000);
 
-        if( read(sock , &name_query , 2000) > 0)
+        if( recv(sock , name_query , 4000, 0) > 0)
         {
-            printf("%i, %x\n", name_query, name_query);
-            int * msg_digits = malloc(20);
-            msg_digits = messageToBytes(name_query);
-            printf("%i, %i, %i\n", msg_digits[0], msg_digits[1],msg_digits[2]);
+            printf("%s\n", name_query);
+            char* id = malloc(8);
+            if (strlen(name_query)>8) {
+              for (int i = 0; i < 8; i++) {
+                id[i] = name_query[i];
+              }
+            }
+
+            if (strncmp(id, "00000010", 8) == 0)
+            {
+              char* name;
+              name = getName();
+              if( send(sock , name , strlen(name) , 0) < 0)
+              {
+                puts("Send failed");
+                return 1;
+              }
+            }
+
+            //execMsgReq(id);
+            //int * msg_digits = malloc(20);
+            //msg_digits = messageToBytes(name_query);
+            //printf("%i, %i, %i\n", msg_digits[0], msg_digits[1],msg_digits[2]);
+
 ////            execMsgReq(msg_digits[0]);
 //            printf("Server request: %s \n", server_reply);
 //            server_reply = malloc(2000 * sizeof(char));
@@ -100,4 +121,9 @@ int * messageToBytes(int message)
     return digits;
 }
 
-//execMsgReq(int msg_)
+// void execMsgReq(char* id)
+// {
+//   if (id = "00000010")
+//     ;
+//
+// }

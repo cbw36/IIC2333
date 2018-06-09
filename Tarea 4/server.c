@@ -9,14 +9,21 @@
 #include<arpa/inet.h> //inet_addr
 #include<unistd.h>    //write
 #include<pthread.h> //for threading , link with lpthread
+#include"player.h"
 
 //the thread function
 void *connection_handler(void *);
+Player** players;
+int count;
+int count_named;
 
 int main(int argc , char *argv[])
 {
+    players = malloc(2*sizeof(Player));
     int socket_desc , client_sock , c , *new_sock;
     struct sockaddr_in server , client;
+    count = 0;
+    count_named = 0;
 
     //Create socket
     socket_desc = socket(AF_INET , SOCK_STREAM , 0); //(domain, communication type, protocol
@@ -52,6 +59,9 @@ int main(int argc , char *argv[])
         pthread_t sniffer_thread;
         new_sock = malloc(1);
         *new_sock = client_sock;
+        Player* player = malloc(sizeof(Player));
+        player->id = *(int*)new_sock;
+        players[count] = player;
 
         if( pthread_create( &sniffer_thread , NULL ,  connection_handler , (void*) new_sock) < 0)
         {
@@ -79,15 +89,16 @@ int main(int argc , char *argv[])
 void *connection_handler(void *socket_desc)
 {
     //Get the socket descriptor
+    count ++;
     int sock = *(int*)socket_desc;
     int read_size;
     char *message;
     char * client_message;
-    client_message = malloc(2000* sizeof(char));
+    client_message = malloc(20* sizeof(char));
 
     /** Step 1: get nickname  **/
-    int name_msg_que = 0xF00;
-    write(sock, &name_msg_que, sizeof(name_msg_que)* sizeof(int));
+    char* msg = "000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
+    write(sock, msg, 96 * sizeof(char));
     puts("sent query");
 //    read_size = recv(sock , name_msg_res , 2000 , 0); //TODO how is it time independent lol?
 //    printf("Nickname registered as %s", name_msg_res); //TODO set global name
@@ -95,28 +106,42 @@ void *connection_handler(void *socket_desc)
     //TODO add a wait for other player
 
 
+   while( (read_size = recv(sock , client_message, 20 , 0)) > 0 )//(socket, buffer, length, flags)
+   {
+       for (int i = 0; i < count; i++) {
+         if (players[i]->id == sock){
+           players[i]->name = client_message;
+           count_named ++;
+         }
+         printf("nombre:%s, count_named:%i\n", players[i]->name, count_named);
+       }
+       if (count_named == 2){
+            printf("sock:%i %i\n",sock, players[1]->id);
+          write(players[0]->id, "Se te ha otorgado los 1000 pesos\n", 40);
+           write(players[0]->id, "se a encontado rival: \n" , 20);
+           write(players[0]->id, players[1]->name, 20);
 
+           write(players[1]->id, "se a encontado rival: \n" , 20);
+           write(players[1]->id, players[0]->name, 20);
+           write(players[1]->id, "Se te ha otorgado los 1000 pesos\n", 40);
+           players[0]-> pot = 1000;
+           players[1]-> pot = 1000;
 
-    //Receive a message from client
-//    while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 )//(socket, buffer, length, flags)
-//    {
-//        //Send the message back to client
-//        write(sock , client_message , strlen(client_message)); //(output file, buffer, length)
-//        client_message = malloc(2000* sizeof(char));
-//    }
-//
-//    if(read_size == 0)
-//    {
-//        puts("Client disconnected");
-//        fflush(stdout);
-//    }
-//    else if(read_size == -1)
-//    {
-//        perror("recv failed");
-//    }
-//
-//    //Free the socket pointer
-//    free(socket_desc);
+       }
+   }
+
+   if(read_size == 0)
+   {
+       puts("Client disconnected");
+       fflush(stdout);
+   }
+   else if(read_size == -1)
+   {
+       perror("recv failed");
+   }
+
+   //Free the socket pointer
+   free(socket_desc);
 
     return 0;
 }
