@@ -1,3 +1,7 @@
+/*
+    C socket server example, handles multiple clients using threads
+*/
+
 #include<stdio.h>
 #include<string.h>    //strlen
 #include<stdlib.h>    //strlen
@@ -15,7 +19,7 @@ int main(int argc , char *argv[])
     struct sockaddr_in server , client;
 
     //Create socket
-    socket_desc = socket(AF_INET , SOCK_STREAM , 0);
+    socket_desc = socket(AF_INET , SOCK_STREAM , 0); //(domain, communication type, protocol
     if (socket_desc == -1)
     {
         printf("Could not create socket");
@@ -24,30 +28,24 @@ int main(int argc , char *argv[])
 
     //Prepare the sockaddr_in structure
     server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons( 8080 );
+    server.sin_addr.s_addr = INADDR_ANY; //IP address
+    server.sin_port = htons( 8888 ); // IP port
 
-    //Bind
-    if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
+    //Bind socket to address and port number specified above
+    if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0) //(sockfd, sockaddr, addrlen)
     {
-        //print the error message
         perror("bind failed. Error");
         return 1;
     }
     puts("bind done");
 
     //Listen
-    listen(socket_desc , 3);
+    listen(socket_desc , 3); // 3 is max # of connections to server in queue
 
     //Accept and incoming connection
     puts("Waiting for incoming connections...");
     c = sizeof(struct sockaddr_in);
-
-
-    //Accept and incoming connection
-    puts("Waiting for incoming connections...");
-    c = sizeof(struct sockaddr_in);
-    while( (client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
+    while( (client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) ) //connect to first request in queue
     {
         puts("Connection accepted");
 
@@ -83,37 +81,42 @@ void *connection_handler(void *socket_desc)
     //Get the socket descriptor
     int sock = *(int*)socket_desc;
     int read_size;
-    char *message , client_message[2000];
+    char *message;
+    char * client_message;
+    client_message = malloc(2000* sizeof(char));
 
-    //Send some messages to the client
+    /** Step 1: get nickname  **/
+    int name_msg_que = 0xF00;
+    write(sock, &name_msg_que, sizeof(name_msg_que)* sizeof(int));
+    puts("sent query");
+//    read_size = recv(sock , name_msg_res , 2000 , 0); //TODO how is it time independent lol?
+//    printf("Nickname registered as %s", name_msg_res); //TODO set global name
 
-    message = "Greetings! I am your connection handler\n";
-    write(sock , message , strlen(message));
+    //TODO add a wait for other player
 
-    message = "Now type something and i shall repeat what you type \n";
-    write(sock , message , strlen(message));
+
+
 
     //Receive a message from client
-    while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 )
-    {
-        //Send the message back to client
-        puts(client_message);
-        printf("sock: %i\n", sock);
-        write(sock , client_message , strlen(client_message));
-    }
-
-    if(read_size == 0)
-    {
-        puts("Client disconnected");
-        fflush(stdout);
-    }
-    else if(read_size == -1)
-    {
-        perror("recv failed");
-    }
-
-    //Free the socket pointer
-    free(socket_desc);
+//    while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 )//(socket, buffer, length, flags)
+//    {
+//        //Send the message back to client
+//        write(sock , client_message , strlen(client_message)); //(output file, buffer, length)
+//        client_message = malloc(2000* sizeof(char));
+//    }
+//
+//    if(read_size == 0)
+//    {
+//        puts("Client disconnected");
+//        fflush(stdout);
+//    }
+//    else if(read_size == -1)
+//    {
+//        perror("recv failed");
+//    }
+//
+//    //Free the socket pointer
+//    free(socket_desc);
 
     return 0;
 }
