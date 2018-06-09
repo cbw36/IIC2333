@@ -54,7 +54,7 @@ int main(int argc , char *argv[])
               }
             }
 
-            if (strncmp(id, "00000010", 8) == 0)
+            if (strncmp(id, "00000011", 8) == 0)
             {
               char* name;
               char* resp_id = "00000100";
@@ -65,6 +65,13 @@ int main(int argc , char *argv[])
                 return 1;
               }
             }
+
+            if (strncmp(id, "00000101", 8) == 0)
+            {
+              puts("Rival found");
+
+            }
+
             if (strncmp(id, "00000110", 8) == 0)
             {
                 puts("Se te han otorgado 1000 dolares");
@@ -79,7 +86,7 @@ int main(int argc , char *argv[])
                 puts("Se a realizado la apuesta inicial de 10 dolares");
             }
             if (strncmp(id, "00001010", 8) == 0)
-            {   Card
+            {
                 puts("Se a entregado las 5 cartas");
             }
             //int * msg_digits = malloc(20);
@@ -142,9 +149,8 @@ char* getName(char* resp_id)
     name_msg[i]= msg_size[i-8];
   for (int i = 16;i<16+ strlen(name_bin);i++)
     name_msg[i] = name_bin[i-16];
-  puts(name_msg);
 
-  return name;
+  return name_msg;
 }
 
 int * messageToBytes(int message)

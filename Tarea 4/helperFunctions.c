@@ -5,7 +5,7 @@
 int hex_binary(char hex[], int binary_number[]);
 int * dec_to_bin(int dec_name, int*bin_name, int ind);
 char* strToBin(char* str);
-
+char* getRivMsg(char* riv_nam, char* resp_id);
 
 
 int hex_binary(char hex[], int binary_number[])
@@ -92,5 +92,33 @@ int* binToInt(char* bin){
   }
   return msg_vals;
 }
+
+char* getRivMsg(char* riv_name, char* resp_id)
+{
+
+  int len = strlen(riv_name);
+
+  char* name_bin = malloc(8*len);
+  name_bin = strToBin(riv_name);
+
+  int* msg_size_int = malloc(8*sizeof(int));
+  char* msg_size = malloc(8);
+  msg_size_int = dec_to_bin(strlen(riv_name), msg_size_int, 7);
+  for (int i = 0;i<8;i++)
+    msg_size[i] = msg_size_int[i] + '0';
+
+
+  char* name_msg = malloc(16 + strlen(name_bin));
+  for (int i = 0; i<8;i++)
+    name_msg[i] = resp_id[i];
+  for (int i = 8; i<16;i++)
+    name_msg[i]= msg_size[i-8];
+  for (int i = 16;i<16+ strlen(name_bin);i++)
+    name_msg[i] = name_bin[i-16];
+  puts(name_msg);
+
+  return name_msg;
+}
+
 
 //    printf("%c%c%c%c%c%c%c%c\n",bin[i],bin[i+1],bin[i+2],bin[i+3],bin[i+4],bin[i+5],bin[i+6],bin[i+7]);

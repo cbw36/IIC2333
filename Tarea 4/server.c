@@ -104,32 +104,38 @@ void *connection_handler(void *socket_desc)
     char * client_message;
     client_message = malloc(20* sizeof(char));
     /** Step 1: get nickname  **/
-    char* msg = "0000001000000000";
+    char* msg = "0000001100000000";
     write(sock, msg, 96 * sizeof(char));
     puts("sent query");
-//    read_size = recv(sock , name_msg_res , 2000 , 0); //TODO how is it time independent lol?
-//    printf("Nickname registered as %s", name_msg_res); //TODO set global name
-
-    //TODO add a wait for other player
 
 
-   while( (read_size = recv(sock , client_message, 20 , 0)) > 0 )//(socket, buffer, length, flags)
+
+   while( (read_size = recv(sock , client_message, 100 , 0)) > 0 )//(socket, buffer, length, flags)
    {
        for (int i = 0; i < count; i++) {
          if (players[i]->id == sock){
-           players[i]->name = client_message;
+           int * msg_int = binToInt(client_message);
+           char* name = malloc(50);
+           int c =0;
+           for (int i = msg_int[1]; i>0;i--) {
+             name[c] = msg_int[c + 2];
+             c++;
+           }
+           players[i]->name = name;
            count_named ++;
          }
-         printf("nombre:%s, count_named:%i\n", players[i]->name, count_named);
+//         printf("nombre:%s, count_named:%i\n", players[i]->name, count_named);
        }
        if (count_named == 2){
+           char* p0_riv_msg = getRivMsg(players[1]->name, "00000101");
+           char* p1_riv_msg = getRivMsg(players[0]->name, "00000101");
 
            write(players[0]->id, "se a encontado rival: \n" , 20);
            sleep(1);
-           write(players[0]->id, players[1]->name, 20);
+           write(players[0]->id, p0_riv_msg, strlen(p0_riv_msg));
            write(players[1]->id, "se a encontado rival: \n" , 20);
            sleep(1);
-           write(players[1]->id, players[0]->name, 20);
+           write(players[1]->id, p1_riv_msg, strlen(p1_riv_msg));
            sleep(1);
            write(players[1]->id, "00000110000000100000001111101000", 80);
            write(players[0]->id, "00000110000000100000001111101000", 80);
@@ -141,9 +147,11 @@ void *connection_handler(void *socket_desc)
              int* value_player2 = malloc(16*sizeof(int));
              value_player1 = dec_to_bin(players[0]-> pot, value_player1, 15);
              value_player2 = dec_to_bin(players[1]-> pot, value_player2, 15);
-             char* msgPlayer1=malloc(24);
-             char* msgPlayer2=malloc(24);
+             char* msgPlayer1=malloc(32);
+             char* msgPlayer2=malloc(32);
              char* msgInit_id = "00001000";
+             char* pot_payload = "00000010";
+
 
              for (int i=0;i<24;i++)
              {
@@ -151,13 +159,18 @@ void *connection_handler(void *socket_desc)
                  msgPlayer1[i] = msgInit_id[i];
                  msgPlayer2[i] =msgInit_id[i];
                }
+               else if(i<16){
+                 msgPlayer1[i] = msgInit_id[i-8];
+                 msgPlayer1[i] = msgInit_id[i-8];
+
+               }
                else{
-                 msgPlayer1[i] = value_player1[i-8] + '0';
-                 msgPlayer2[i] = value_player2[i-8] + '0';
+                 msgPlayer1[i] = value_player1[i-16] + '0';
+                 msgPlayer2[i] = value_player2[i-16] + '0';
                }
 
              }
-             write(players[1]->id, msgPlayer1, 80);
+             write(players[1]->id, msgPlayer1, 80);// TODO add size of payload
              write(players[0]->id, msgPlayer2, 80);
              sleep(1);
              char* msgBet = "000010010000000100001010";
