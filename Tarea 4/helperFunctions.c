@@ -4,7 +4,7 @@
 
 int hex_binary(char hex[], int binary_number[]);
 int * dec_to_bin(int dec_name, int*bin_name, int ind);
-
+char* strToBin(char* str);
 
 
 
@@ -56,22 +56,41 @@ int * dec_to_bin(int dec_name, int*bin_name, int ind)
     bin_name = dec_to_bin(dec_name, bin_name, ind);
   }
   return bin_name;
+
 }
 
-//int main()
-//{
-//  char hex[20];
-//  int binary_number[100];
-//  int j,k;
-//
-//  printf("Enter hexadecimal number: ");
-//  scanf("%19s",hex);
-//  j = hex_binary(hex,binary_number);
-//
-//  printf("Binary number is: ");
-//  for(k=j-1;k>=0;k--)
-//  printf("next %d",binary_number[k]);
-//  printf("\n");
-//
-//  return 0;
-//}
+char* strToBin(char* str)
+{
+  int len = strlen(str);
+  char* str_bin = malloc((8 * len)+1);
+  int ind = 0;
+  int count = 0;
+
+  while (count<len)
+  {
+    int * char_int = malloc(8*sizeof(int));
+    char_int = dec_to_bin(str[count], char_int, 7);
+
+    char* char_bin = malloc(8);
+    for (int i = 0; i<8;i++)
+      char_bin[i] = char_int[i] + '0';
+    for (int i =ind;i<ind+8;i++)
+      str_bin[i] = char_bin[i-ind];
+    ++count;
+    ind = ind+8;
+  }
+  return str_bin;
+
+}
+
+int* binToInt(char* bin){
+  int * msg_vals = malloc(strlen(bin) * sizeof(int)/8);
+  for (int i =0; i<strlen(bin);i+=8)
+  {
+    int b0 = bin[i]-'0'; int b1 = bin[i+1]-'0';int b2 = bin[i+2]-'0';int b3 = bin[i+3]-'0';int b4 = bin[i+4]-'0';int b5 = bin[i+5]-'0';int b6 = bin[i+6]-'0';int b7 = bin[i+7]-'0';
+    msg_vals[i/8] = (b0*128) + (b1*64)+ (b2*32)+ (b3*16)+ (b4*8)+ (b5*4)+ (b6*2)+ b7;
+  }
+  return msg_vals;
+}
+
+//    printf("%c%c%c%c%c%c%c%c\n",bin[i],bin[i+1],bin[i+2],bin[i+3],bin[i+4],bin[i+5],bin[i+6],bin[i+7]);

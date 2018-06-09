@@ -8,8 +8,9 @@
 #include<arpa/inet.h> //inet_addr
 #include"helperFunctions.c"
 
-char*getName();
+char*getName(char* resp_id);
 int * messageToBytes(int message);
+char* strToBin(char* str);
 
 
 int main(int argc , char *argv[])
@@ -44,7 +45,7 @@ int main(int argc , char *argv[])
 
         if( recv(sock , name_query , 4000, 0) > 0)
         {
-            printf("%s\n", name_query);
+//            printf("%s\n", name_query);
             char* id = malloc(8);
             if (strlen(name_query)>8) {
               for (int i = 0; i < 8; i++) {
@@ -55,7 +56,8 @@ int main(int argc , char *argv[])
             if (strncmp(id, "00000010", 8) == 0)
             {
               char* name;
-              name = getName();
+              char* resp_id = "00000100";
+              name = getName(resp_id);
               if( send(sock , name , strlen(name) , 0) < 0)
               {
                 puts("Send failed");
@@ -100,12 +102,33 @@ int main(int argc , char *argv[])
     return 0;
 }
 
-char* getName()
+char* getName(char* resp_id)
 {
     char* name = malloc(20);
     printf("Please enter your name to be used while playing: ");
     scanf("%s" , name);
-    return name;
+    int len = strlen(name);
+
+    char* name_bin = malloc(8*len);
+    name_bin = strToBin(name);
+
+    int* msg_size_int = malloc(8*sizeof(int));
+    char* msg_size = malloc(8);
+    msg_size_int = dec_to_bin(strlen(name), msg_size_int, 7);
+    for (int i = 0;i<8;i++)
+      msg_size[i] = msg_size_int[i] + '0';
+
+
+  char* name_msg = malloc(16 + strlen(name_bin));
+  for (int i = 0; i<8;i++)
+    name_msg[i] = resp_id[i];
+  for (int i = 8; i<16;i++)
+    name_msg[i]= msg_size[i-8];
+  for (int i = 16;i<16+ strlen(name_bin);i++)
+    name_msg[i] = name_bin[i-16];
+  puts(name_msg);
+
+  return name;
 }
 
 int * messageToBytes(int message)
@@ -118,12 +141,9 @@ int * messageToBytes(int message)
         digits[loc] = digit;
         loc++;
     }
+
+
+
     return digits;
 }
 
-// void execMsgReq(char* id)
-// {
-//   if (id = "00000010")
-//     ;
-//
-// }
