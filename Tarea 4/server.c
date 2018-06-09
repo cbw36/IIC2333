@@ -11,24 +11,28 @@
 #include<pthread.h> //for threading , link with lpthread
 #include"player.h"
 #include <time.h>
+#include"helperFunctions.c"
 
 //the thread function
 char* decCard_tobin(int value);
 void *connection_handler(void *);
+void init_deck();
+Card** hand();
 Player** players;
 Card** deck;
 int count;
 int count_named;
 
 
+
 int main(int argc , char *argv[])
-{   deck = malloc(52*sizeof(Card));
+{
     players = malloc(2*sizeof(Player));
     int socket_desc , client_sock , c , *new_sock;
     struct sockaddr_in server , client;
     count = 0;
     count_named = 0;
-
+    init_deck();
     //Create socket
     socket_desc = socket(AF_INET , SOCK_STREAM , 0); //(domain, communication type, protocol
     if (socket_desc == -1)
@@ -99,7 +103,6 @@ void *connection_handler(void *socket_desc)
     char *message;
     char * client_message;
     client_message = malloc(20* sizeof(char));
-
     /** Step 1: get nickname  **/
     char* msg = "0000001000000000";
     write(sock, msg, 96 * sizeof(char));
@@ -130,8 +133,68 @@ void *connection_handler(void *socket_desc)
            sleep(1);
            write(players[1]->id, "00000110000000100000001111101000", 80);
            write(players[0]->id, "00000110000000100000001111101000", 80);
+           sleep(1);
            players[0]-> pot = 1000;
            players[1]-> pot = 1000;
+           while (players[0]-> pot>10 && players[0]->pot >10) {
+             int* value_player1 = malloc(16*sizeof(int));
+             int* value_player2 = malloc(16*sizeof(int));
+             value_player1 = dec_to_bin(players[0]-> pot, value_player1, 15);
+             value_player2 = dec_to_bin(players[1]-> pot, value_player2, 15);
+             char* msgPlayer1=malloc(24);
+             char* msgPlayer2=malloc(24);
+             char* msgInit_id = "00001000";
+
+             for (int i=0;i<24;i++)
+             {
+               if (i<8){
+                 msgPlayer1[i] = msgInit_id[i];
+                 msgPlayer2[i] =msgInit_id[i];
+               }
+               else{
+                 msgPlayer1[i] = value_player1[i-8] + '0';
+                 msgPlayer2[i] = value_player2[i-8] + '0';
+               }
+
+             }
+             write(players[1]->id, msgPlayer1, 80);
+             write(players[0]->id, msgPlayer2, 80);
+             sleep(1);
+             char* msgBet = "000010010000000100001010";
+             write(players[1]->id, msgBet, 80);
+             write(players[0]->id, msgBet, 80);
+             players[0]->bet = players[0]->bet + 10;
+             players[1]->bet = players[1]->bet + 10;
+             players[0]->pot = players[0]->pot - 10;
+             players[1]->pot = players[1]->pot - 10;
+             printf("playe1 pot:%i playe1 bet:%i playe2 pot:%i playe2 bet:%i\n", players[0]->pot, players[0]->bet, players[1]->pot, players[1]->bet);
+             sleep(1);
+             players[0]->hand = hand();
+             players[1]->hand = hand();
+             for (int i = 0; i < 5; i++) {
+               printf("Jugador1 card_value: %s card_shape: %s\n", players[0]->hand[i]->value, players[0]->hand[i]->shape);
+               printf("Jugador2 card_value: %s card_shape: %s\n", players[1]->hand[i]->value, players[1]->hand[i]->shape);
+             }
+             char* msgCardsPlayer1 = malloc(96);
+             char* msgCardsPlayer2 = malloc(96);
+             char* msgCards_idsize = "0000101000001010";
+             for (int i = 0; i < 16; i++) {
+                msgCardsPlayer1[i] = msgCards_idsize[i];
+                msgCardsPlayer2[i] = msgCards_idsize[i];
+             }
+             for (int i = 0; i < 5; i++) {
+               for (int j = 0; j < 8; j++) {
+                     msgCardsPlayer1[16+(i*16)+j] = players[0]->hand[i]->value[j];
+                     msgCardsPlayer2[16+(i*16)+j] = players[1]->hand[i]->value[j];
+                     msgCardsPlayer1[16+(i*16)+j+8] = players[0]->hand[i]->shape[j];
+                     msgCardsPlayer2[16+(i*16)+j+8] = players[1]->hand[i]->shape[j];
+               }
+             }
+             write(players[0]->id, msgCardsPlayer1, 80);
+             write(players[1]->id, msgCardsPlayer2, 80);
+             break;
+
+           }
 
        }
    }
@@ -153,12 +216,14 @@ void *connection_handler(void *socket_desc)
 }
 
 void init_deck(){
-
+  deck = malloc(52*sizeof(Card));
   for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 13; i++) {
+    for (int j = 0; j < 13; j++) {
       Card* card = malloc(sizeof(Card));
+      card->value = malloc(8);
       card->value = decCard_tobin(j+1);
       card->used = 0;
+      card->shape = malloc(8);
       card->shape = decCard_tobin(i+1);
       deck[i*13+j] = card;
     }
@@ -182,7 +247,6 @@ Card** hand(){
       handPlayer[cantidad] = deck[random%52];
       cantidad ++;
     }
-
   }
   return handPlayer;
 }

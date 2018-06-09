@@ -7,6 +7,7 @@
 #include<sys/socket.h>    //socket
 #include<arpa/inet.h> //inet_addr
 #include"helperFunctions.c"
+#include"player.h"
 
 char*getName();
 int * messageToBytes(int message);
@@ -66,6 +67,19 @@ int main(int argc , char *argv[])
             {
                 puts("Se te han otorgado 1000 dolares");
             }
+            if (strncmp(id, "00001000", 8) == 0)
+            {
+                puts("Se ha iniciado correctamente la partida");
+            }
+
+            if (strncmp(id, "00001001", 8) == 0)
+            {
+                puts("Se a realizado la apuesta inicial de 10 dolares");
+            }
+            if (strncmp(id, "00001010", 8) == 0)
+            {   Card
+                puts("Se a entregado las 5 cartas");
+            }
             //int * msg_digits = malloc(20);
             //msg_digits = messageToBytes(name_query);
             //printf("%i, %i, %i\n", msg_digits[0], msg_digits[1],msg_digits[2]);
@@ -121,4 +135,16 @@ int * messageToBytes(int message)
         loc++;
     }
     return digits;
+}
+
+int bin2int(const char *bin)
+{
+    int i, j;
+    j = sizeof(int)*8;
+    while ( (j--) && ((*bin=='0') || (*bin=='1')) ) {
+        i <<= 1;
+        if ( *bin=='1' ) i++;
+        bin++;
+    }
+    return i;
 }
