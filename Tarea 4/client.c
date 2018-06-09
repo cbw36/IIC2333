@@ -77,7 +77,8 @@ int main(int argc , char *argv[])
                 puts("Se a realizado la apuesta inicial de 10 dolares");
             }
             if (strncmp(id, "00001010", 8) == 0)
-            {   Card
+            {
+                
                 puts("Se a entregado las 5 cartas");
             }
             //int * msg_digits = malloc(20);
